@@ -536,32 +536,52 @@ let prices = { '0050': null, '006208': null };
 let prevPrices = { '0050': null, '006208': null };
 
 async function fetchPrice(symbol) {
-  const ticker = symbol + '.TW';
-  const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=2d`;
+  try {
+    const res = await fetch(
+      `https://mis.twse.com.tw/stock/api/getStockInfo.asp?ex_ch=tse_${symbol}.tw&json=1&delay=0`,
+      { signal: AbortSignal.timeout(6000) }
+    );
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+    const d = json?.msgArray?.[0];
+    if (!d) throw new Error('no data');
 
-  const proxies = [
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
-    `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
-    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yahooUrl)}`
-  ];
+    const prevClose = parseFloat(d.y);   // 昨收
+    const high = parseFloat(d.h);
+    const low = parseFloat(d.l);
+    const volume = parseInt(d.v) || 0;
 
-  for (const proxyUrl of proxies) {
+    // 盤中用成交價 z，收盤或盤前用收盤價 c
+    let price = parseFloat(d.z);
+    if (isNaN(price) || d.z === '-') {
+      price = parseFloat(d.c);  // 當日收盤價（收盤後才有）
+    }
+    if (isNaN(price) || d.c === '-') {
+      price = prevClose;         // 最後備援：昨收
+    }
+    if (isNaN(price)) throw new Error('invalid price');
+
+    return { price, prevClose, high, low, volume };
+  } catch {
+    // 備援：鉅亨網 API
     try {
-      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
-      if (!res.ok) continue;
-      const json = await res.json();
-      const meta = json?.chart?.result?.[0]?.meta;
-      if (!meta || !meta.regularMarketPrice) continue;
+      const res2 = await fetch(
+        `https://ws.api.cnyes.com/ws/api/v1/quote/quotes/TWS:${symbol}:STOCK?column=C,H,L,O,REFP,V`,
+        { signal: AbortSignal.timeout(6000) }
+      );
+      if (!res2.ok) throw new Error();
+      const j2 = await res2.json();
+      const data = j2?.data?.items?.[0];
+      if (!data) throw new Error();
       return {
-        price: meta.regularMarketPrice,
-        prevClose: meta.chartPreviousClose || meta.previousClose || meta.regularMarketPrice,
-        high: meta.regularMarketDayHigh,
-        low: meta.regularMarketDayLow,
-        volume: meta.regularMarketVolume
+        price: parseFloat(data.C),
+        prevClose: parseFloat(data.REFP || data.C),
+        high: parseFloat(data.H),
+        low: parseFloat(data.L),
+        volume: parseInt(data.V) || 0
       };
-    } catch { continue; }
+    } catch { return null; }
   }
-  return null;
 }
 
 function fmt(n) {
