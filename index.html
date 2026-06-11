@@ -293,6 +293,7 @@
     <button class="nav-tab" onclick="showPage('bro')">弟弟</button>
   </div>
   <div class="nav-right">
+    <div class="update-time" id="data-source" style="font-size:12px;color:var(--text3)">載入試算表中...</div>
     <div class="live-badge">
       <div class="live-dot" id="live-dot"></div>
       <span>即時</span>
@@ -439,93 +440,70 @@
 </div>
 
 <script>
-// ===================== 靜態資料 =====================
-const DATA = {
-  dad: {
-    name: '爸爸',
-    stocks: {
-      '0050': {
-        shares: 69550,
-        totalCost: 2809117,
-        fee: 0,        // 手續費已含在totalCost內，分開顯示需計算
-        avgCostRaw: 46.01,       // 買入均價（未含配股配息）
-        avgCostAdj: 39.14,       // 每股成本（配股配息後）
-        dividend: 87192,
-        bonusShares: 0,
-        realizedPnl: 87192,
-        soldShares: 0,
-      },
-      '006208': {
-        shares: 2618,
-        totalCost: 262219,
-        fee: 0,
-        avgCostRaw: 100.16,
-        avgCostAdj: 95.71,
-        dividend: 11640,
-        bonusShares: 0,
-        realizedPnl: 11640,
-        soldShares: 0,
-      }
-    }
-  },
-  sis: {
-    name: '姐姐',
-    stocks: {
-      '006208': {
-        shares: 1310,
-        totalCost: 147884,
-        fee: 0,
-        avgCostRaw: 112.89,
-        avgCostAdj: 108.82,
-        dividend: 5324,
-        bonusShares: 0,
-        realizedPnl: 5324,
-        soldShares: 0,
-      },
-      '0050': {
-        shares: 188,
-        totalCost: 10325,
-        fee: 0,
-        avgCostRaw: 54.92,
-        avgCostAdj: 53.84,
-        dividend: 203,
-        bonusShares: 0,
-        realizedPnl: 203,
-        soldShares: 0,
-      }
-    }
-  },
-  bro: {
-    name: '弟弟',
-    stocks: {
-      '006208': {
-        shares: 1223,
-        totalCost: 140669,
-        fee: 0,
-        avgCostRaw: 115.02,
-        avgCostAdj: 110.98,
-        dividend: 4941,
-        bonusShares: 0,
-        realizedPnl: 4941,
-        soldShares: 0,
-      },
-      '0050': {
-        shares: 164,
-        totalCost: 7917,
-        fee: 0,
-        avgCostRaw: 48.27,
-        avgCostAdj: 47.04,
-        dividend: 203,
-        bonusShares: 0,
-        realizedPnl: 203,
-        soldShares: 0,
-      }
-    }
-  }
+// ===================== Apps Script API 設定 =====================
+// 部署後把 Web App URL 貼在這裡
+let APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaMSqk9yANsr7nact5w4ZisW2aS8b01apSvC7W_2Drj-tuCHVHhLy_0l-RSMRABvL42g/exec';
+
+// 備用靜態資料（API 尚未設定或載入失敗時使用）
+const FALLBACK_DATA = {
+  dad: { name: '爸爸', stocks: {
+    '0050':   { shares:69550, totalCost:2809117, avgCostRaw:46.01, avgCostAdj:39.14, dividend:87192,  bonusShares:0, realizedPnl:87192,  soldShares:0 },
+    '006208': { shares:2618,  totalCost:262219,  avgCostRaw:100.16,avgCostAdj:95.71, dividend:11640,  bonusShares:0, realizedPnl:11640,  soldShares:0 }
+  }},
+  sis: { name: '姐姐', stocks: {
+    '006208': { shares:1310,  totalCost:147884,  avgCostRaw:112.89,avgCostAdj:108.82,dividend:5324,   bonusShares:0, realizedPnl:5324,   soldShares:0 },
+    '0050':   { shares:188,   totalCost:10325,   avgCostRaw:54.92, avgCostAdj:53.84, dividend:203,    bonusShares:0, realizedPnl:203,    soldShares:0 }
+  }},
+  bro: { name: '弟弟', stocks: {
+    '006208': { shares:1223,  totalCost:140669,  avgCostRaw:115.02,avgCostAdj:110.98,dividend:4941,   bonusShares:0, realizedPnl:4941,   soldShares:0 },
+    '0050':   { shares:164,   totalCost:7917,    avgCostRaw:48.27, avgCostAdj:47.04, dividend:203,    bonusShares:0, realizedPnl:203,    soldShares:0 }
+  }}
 };
 
-// 手續費估算（買入總成本 × 0.001425 × 折扣0.6 ≈ 0.0855%，反推）
-// 由於試算表將手續費含入買入實付，這裡估算手續費佔比
+let DATA = JSON.parse(JSON.stringify(FALLBACK_DATA));
+
+// 從 Apps Script 載入最新資料
+async function loadSheetData() {
+  if (!APPS_SCRIPT_URL) return false;
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+
+    // 把 API 回傳資料合併進 DATA
+    for (const person of ['dad', 'sis', 'bro']) {
+      if (!json[person]) continue;
+      for (const symbol of ['0050', '006208']) {
+        if (!json[person][symbol]) continue;
+        const s = json[person][symbol];
+        DATA[person].stocks[symbol] = {
+          shares:       s.shares       || 0,
+          totalCost:    s.totalCost    || 0,
+          avgCostRaw:   s.avgCostRaw   || 0,
+          avgCostAdj:   s.avgCostAdj   || 0,
+          dividend:     s.dividend     || 0,
+          bonusShares:  s.bonusShares  || 0,
+          realizedPnl:  s.realizedPnl  || 0,
+          soldShares:   s.soldShares   || 0,
+        };
+      }
+    }
+
+    // 顯示資料來源標記
+    const el = document.getElementById('data-source');
+    if (el) {
+      const t = new Date(json.updatedAt);
+      el.textContent = '試算表同步：' + t.toLocaleString('zh-TW');
+      el.style.color = 'var(--green)';
+    }
+    return true;
+  } catch {
+    const el = document.getElementById('data-source');
+    if (el) { el.textContent = '使用備用資料'; el.style.color = 'var(--text3)'; }
+    return false;
+  }
+}
+
 function estFee(totalCost, avgPrice, shares) {
   const pure = avgPrice * shares;
   return Math.round(totalCost - pure);
@@ -877,8 +855,15 @@ function showPage(id) {
   document.querySelectorAll('.nav-tab')[tabs[id]].classList.add('active');
 }
 
-refresh();
-setInterval(refresh, 3000);
+// 啟動：先載入試算表資料，再開始即時股價更新
+async function init() {
+  await loadSheetData();  // 抓試算表
+  await refresh();        // 抓即時股價 + 渲染
+  setInterval(refresh, 3000);          // 股價每3秒更新
+  setInterval(loadSheetData, 300000);  // 試算表每5分鐘重新同步
+}
+
+init();
 </script>
 </body>
 </html>
