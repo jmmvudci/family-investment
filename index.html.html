@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家庭投資儀表板</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --bg2: #eef0f3;
+    --bg3: #e8eaee;
+    --card: #ffffff;
+    --card2: #f0f2f5;
+    --border: rgba(0,0,0,0.07);
+    --border2: rgba(0,0,0,0.13);
+    --text: #1a1c24;
+    --text2: #5a5f75;
+    --text3: #9499b0;
+    --green: #0f9e5e;
+    --green-dim: rgba(15,158,94,0.10);
+    --red: #d93025;
+    --red-dim: rgba(217,48,37,0.09);
+    --gold: #b8860b;
+    --gold-dim: rgba(184,134,11,0.10);
+    --blue: #1a6fd4;
+    --blue-dim: rgba(26,111,212,0.10);
+    --purple: #6d4fc2;
+    --purple-dim: rgba(109,79,194,0.10);
+    --teal: #0b7e77;
+    --teal-dim: rgba(11,126,119,0.10);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    font-size: 16px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245,246,248,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: 0.5px; }
+  .nav-logo span { color: var(--gold); }
+  .nav-tabs { display: flex; gap: 4px; }
+  .nav-tab {
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; color: var(--text2); transition: all 0.15s;
+    border: none; background: none;
+  }
+  .nav-tab:hover { background: var(--bg3); color: var(--text); }
+  .nav-tab.active { background: var(--card2); color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text2);
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .update-time { font-size: 11px; color: var(--text3); }
+
+  /* PAGES */
+  .page { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HOME PAGE */
+  .home-hero {
+    text-align: center; padding: 40px 0 32px;
+  }
+  .home-title { font-size: 28px; font-weight: 300; letter-spacing: 1px; margin-bottom: 6px; }
+  .home-title strong { font-weight: 700; color: var(--gold); }
+  .home-sub { font-size: 13px; color: var(--text3); margin-bottom: 32px; }
+
+  /* STOCK PRICE CARDS */
+  .stock-prices {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;
+  }
+  .stock-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px;
+    position: relative; overflow: hidden;
+  }
+  .stock-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .stock-card.s0050::before { background: var(--gold); }
+  .stock-card.s006208::before { background: var(--teal); }
+  .stock-ticker { font-size: 12px; color: var(--text3); letter-spacing: 1px; margin-bottom: 4px; }
+  .stock-name { font-size: 13px; color: var(--text2); margin-bottom: 12px; }
+  .stock-price-row { display: flex; align-items: baseline; gap: 10px; }
+  .stock-price { font-size: 42px; font-weight: 300; letter-spacing: -1px; }
+  .stock-price.loading { color: var(--text3); font-size: 24px; }
+  .price-unit { font-size: 13px; color: var(--text3); }
+  .stock-change {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 13px; padding: 3px 10px; border-radius: 20px;
+    margin-top: 8px; font-weight: 500;
+  }
+  .stock-change.up { background: var(--green-dim); color: var(--green); }
+  .stock-change.down { background: var(--red-dim); color: var(--red); }
+  .stock-change.flat { background: var(--bg3); color: var(--text3); }
+  .stock-meta { font-size: 11px; color: var(--text3); margin-top: 10px; }
+
+  /* SUMMARY TABLE */
+  .section-title {
+    font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 14px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
+  }
+  .person-summary {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px; cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .person-summary:hover { border-color: var(--border2); }
+  .person-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; margin-bottom: 12px;
+  }
+  .avatar-dad { background: var(--gold-dim); color: var(--gold); }
+  .avatar-sis { background: var(--purple-dim); color: var(--purple); }
+  .avatar-bro { background: var(--teal-dim); color: var(--teal); }
+  .person-name { font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+  .person-pnl {
+    font-size: 26px; font-weight: 300; margin-bottom: 2px;
+  }
+  .person-pnl.pos { color: var(--green); }
+  .person-pnl.neg { color: var(--red); }
+  .person-rate { font-size: 12px; }
+  .person-rate.pos { color: var(--green); }
+  .person-rate.neg { color: var(--red); }
+  .person-invested { font-size: 11px; color: var(--text3); margin-top: 8px; }
+
+  /* TOTAL SUMMARY */
+  .total-bar {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px;
+    display: flex; gap: 0; margin-bottom: 32px;
+  }
+  .total-item { flex: 1; padding: 0 20px; border-right: 1px solid var(--border); }
+  .total-item:first-child { padding-left: 0; }
+  .total-item:last-child { border-right: none; }
+  .total-label { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
+  .total-value { font-size: 22px; font-weight: 500; }
+  .total-value.pos { color: var(--green); }
+  .total-value.neg { color: var(--red); }
+
+  /* PERSON PAGE */
+  .person-header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+    padding-bottom: 20px; border-bottom: 1px solid var(--border);
+  }
+  .person-header-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 600;
+  }
+  .person-header h1 { font-size: 22px; font-weight: 500; }
+  .person-header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+  /* HOLDINGS */
+  .holdings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .holding-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; position: relative; overflow: hidden;
+  }
+  .holding-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .holding-0050::before { background: var(--gold); }
+  .holding-006208::before { background: var(--teal); }
+  .holding-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .holding-ticker {
+    font-size: 18px; font-weight: 600; letter-spacing: 0.5px;
+  }
+  .holding-0050 .holding-ticker { color: var(--gold); }
+  .holding-006208 .holding-ticker { color: var(--teal); }
+  .holding-pnl-badge {
+    font-size: 13px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
+  }
+  .holding-pnl-badge.pos { background: var(--green-dim); color: var(--green); }
+  .holding-pnl-badge.neg { background: var(--red-dim); color: var(--red); }
+
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .metric {
+    background: var(--bg3); border-radius: var(--radius-sm); padding: 10px 12px;
+  }
+  .metric-label { font-size: 12px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 4px; }
+  .metric-value { font-size: 17px; font-weight: 500; }
+  .metric-value.pos { color: var(--green); }
+  .metric-value.neg { color: var(--red); }
+  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  /* COST BREAKDOWN */
+  .cost-expand {
+    background: var(--bg3); border-radius: var(--radius-sm);
+    padding: 10px 12px; margin-top: 10px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--text2); user-select: none;
+  }
+  .cost-expand:hover { background: var(--card2); }
+  .cost-detail {
+    background: var(--bg3); border-radius: var(--radius-sm);
+    padding: 12px; margin-top: 6px; display: none;
+  }
+  .cost-detail.open { display: block; }
+  .cost-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cost-row:last-child { border-bottom: none; }
+  .cost-row .label { color: var(--text2); }
+  .cost-row .val { font-weight: 500; }
+
+  /* TOTAL PNL CARD */
+  .total-pnl-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  }
+  .total-pnl-item { padding: 0 20px; border-right: 1px solid var(--border); }
+  .total-pnl-item:first-child { padding-left: 0; }
+  .total-pnl-item:last-child { border-right: none; }
+  .total-pnl-label { font-size: 12px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
+  .total-pnl-value { font-size: 20px; font-weight: 500; }
+  .total-pnl-value.pos { color: var(--green); }
+  .total-pnl-value.neg { color: var(--red); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .nav-tabs { gap: 2px; }
+    .nav-tab { padding: 6px 10px; font-size: 12px; }
+    .page { padding: 16px; }
+    .stock-prices { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stock-price { font-size: 26px; }
+    .summary-grid { grid-template-columns: 1fr; gap: 10px; }
+    .holdings-grid { grid-template-columns: 1fr; }
+    .total-bar { flex-direction: column; gap: 12px; }
+    .total-item { border-right: none; padding: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .total-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .total-pnl-card { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .total-pnl-item { border-right: none; padding: 0; }
+    .total-pnl-item:nth-child(odd) { border-right: 1px solid var(--border); padding-right: 16px; }
+    .home-title { font-size: 22px; }
+  }
+  @media (max-width: 480px) {
+    .stock-prices { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid var(--border2); border-top-color: var(--gold);
+    border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg { font-size: 12px; color: var(--red); margin-top: 6px; }
+  .flash { animation: flash 0.4s ease; }
+  @keyframes flash { 0%,100% { opacity:1; } 50% { opacity: 0.4; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">家庭<span>投資</span>儀表板</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')">總覽</button>
+    <button class="nav-tab" onclick="showPage('dad')">爸爸</button>
+    <button class="nav-tab" onclick="showPage('sis')">姐姐</button>
+    <button class="nav-tab" onclick="showPage('bro')">弟弟</button>
+  </div>
+  <div class="nav-right">
+    <div class="live-badge">
+      <div class="live-dot" id="live-dot"></div>
+      <span>即時</span>
+    </div>
+    <div class="update-time" id="update-time">--:--:--</div>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="home-title">家庭 <strong>投資總覽</strong></div>
+    <div class="home-sub">0050 · 006208 · 即時更新</div>
+  </div>
+
+  <!-- STOCK PRICE CARDS -->
+  <div class="stock-prices">
+    <div class="stock-card s0050">
+      <div class="stock-ticker">0050.TW</div>
+      <div class="stock-name">元大台灣50</div>
+      <div class="stock-price-row">
+        <div class="stock-price loading" id="price-0050"><span class="spinner"></span></div>
+        <div class="price-unit">TWD</div>
+      </div>
+      <div id="change-0050"></div>
+      <div class="stock-meta" id="meta-0050"></div>
+    </div>
+    <div class="stock-card s006208">
+      <div class="stock-ticker">006208.TW</div>
+      <div class="stock-name">富邦台50</div>
+      <div class="stock-price-row">
+        <div class="stock-price loading" id="price-006208"><span class="spinner"></span></div>
+        <div class="price-unit">TWD</div>
+      </div>
+      <div id="change-006208"></div>
+      <div class="stock-meta" id="meta-006208"></div>
+    </div>
+  </div>
+
+  <!-- TOTAL BAR -->
+  <div class="section-title">全家投資概況</div>
+  <div class="total-bar">
+    <div class="total-item">
+      <div class="total-label">總投入成本</div>
+      <div class="total-value" id="home-total-cost">—</div>
+    </div>
+    <div class="total-item">
+      <div class="total-label">已實現損益（含配息）</div>
+      <div class="total-value" id="home-realized">—</div>
+    </div>
+    <div class="total-item">
+      <div class="total-label">未實現損益</div>
+      <div class="total-value" id="home-unrealized">—</div>
+    </div>
+    <div class="total-item">
+      <div class="total-label">總損益</div>
+      <div class="total-value" id="home-total-pnl">—</div>
+    </div>
+    <div class="total-item">
+      <div class="total-label">總報酬率</div>
+      <div class="total-value" id="home-total-rate">—</div>
+    </div>
+  </div>
+
+  <!-- PERSON SUMMARY CARDS -->
+  <div class="section-title">個人概況</div>
+  <div class="summary-grid">
+    <div class="person-summary" onclick="showPage('dad')">
+      <div class="person-avatar avatar-dad">爸</div>
+      <div class="person-name">爸爸</div>
+      <div class="person-pnl" id="home-dad-pnl">—</div>
+      <div class="person-rate" id="home-dad-rate">—</div>
+      <div class="person-invested" id="home-dad-invested">—</div>
+    </div>
+    <div class="person-summary" onclick="showPage('sis')">
+      <div class="person-avatar avatar-sis">姐</div>
+      <div class="person-name">姐姐</div>
+      <div class="person-pnl" id="home-sis-pnl">—</div>
+      <div class="person-rate" id="home-sis-rate">—</div>
+      <div class="person-invested" id="home-sis-invested">—</div>
+    </div>
+    <div class="person-summary" onclick="showPage('bro')">
+      <div class="person-avatar avatar-bro">弟</div>
+      <div class="person-name">弟弟</div>
+      <div class="person-pnl" id="home-bro-pnl">—</div>
+      <div class="person-rate" id="home-bro-rate">—</div>
+      <div class="person-invested" id="home-bro-invested">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- DAD PAGE -->
+<div class="page" id="page-dad">
+  <div class="person-header">
+    <div class="person-header-avatar avatar-dad">爸</div>
+    <div>
+      <h1>爸爸</h1>
+      <p>持有 0050 · 006208</p>
+    </div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px">持股明細</div>
+  <div class="holdings-grid">
+    <div id="card-dad-0050"></div>
+    <div id="card-dad-006208"></div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px">個人總損益</div>
+  <div class="total-pnl-card" id="total-dad"></div>
+</div>
+
+<!-- SIS PAGE -->
+<div class="page" id="page-sis">
+  <div class="person-header">
+    <div class="person-header-avatar avatar-sis">姐</div>
+    <div>
+      <h1>姐姐</h1>
+      <p>持有 006208 · 0050</p>
+    </div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px">持股明細</div>
+  <div class="holdings-grid">
+    <div id="card-sis-006208"></div>
+    <div id="card-sis-0050"></div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px">個人總損益</div>
+  <div class="total-pnl-card" id="total-sis"></div>
+</div>
+
+<!-- BRO PAGE -->
+<div class="page" id="page-bro">
+  <div class="person-header">
+    <div class="person-header-avatar avatar-bro">弟</div>
+    <div>
+      <h1>弟弟</h1>
+      <p>持有 006208 · 0050</p>
+    </div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px">持股明細</div>
+  <div class="holdings-grid">
+    <div id="card-bro-006208"></div>
+    <div id="card-bro-0050"></div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px">個人總損益</div>
+  <div class="total-pnl-card" id="total-bro"></div>
+</div>
+
+<script>
+// ===================== 靜態資料 =====================
+const DATA = {
+  dad: {
+    name: '爸爸',
+    stocks: {
+      '0050': {
+        shares: 69550,
+        totalCost: 2809117,
+        fee: 0,        // 手續費已含在totalCost內，分開顯示需計算
+        avgCostRaw: 46.01,       // 買入均價（未含配股配息）
+        avgCostAdj: 39.14,       // 每股成本（配股配息後）
+        dividend: 87192,
+        bonusShares: 0,
+        realizedPnl: 87192,
+        soldShares: 0,
+      },
+      '006208': {
+        shares: 2618,
+        totalCost: 262219,
+        fee: 0,
+        avgCostRaw: 100.16,
+        avgCostAdj: 95.71,
+        dividend: 11640,
+        bonusShares: 0,
+        realizedPnl: 11640,
+        soldShares: 0,
+      }
+    }
+  },
+  sis: {
+    name: '姐姐',
+    stocks: {
+      '006208': {
+        shares: 1310,
+        totalCost: 147884,
+        fee: 0,
+        avgCostRaw: 112.89,
+        avgCostAdj: 108.82,
+        dividend: 5324,
+        bonusShares: 0,
+        realizedPnl: 5324,
+        soldShares: 0,
+      },
+      '0050': {
+        shares: 188,
+        totalCost: 10325,
+        fee: 0,
+        avgCostRaw: 54.92,
+        avgCostAdj: 53.84,
+        dividend: 203,
+        bonusShares: 0,
+        realizedPnl: 203,
+        soldShares: 0,
+      }
+    }
+  },
+  bro: {
+    name: '弟弟',
+    stocks: {
+      '006208': {
+        shares: 1223,
+        totalCost: 140669,
+        fee: 0,
+        avgCostRaw: 115.02,
+        avgCostAdj: 110.98,
+        dividend: 4941,
+        bonusShares: 0,
+        realizedPnl: 4941,
+        soldShares: 0,
+      },
+      '0050': {
+        shares: 164,
+        totalCost: 7917,
+        fee: 0,
+        avgCostRaw: 48.27,
+        avgCostAdj: 47.04,
+        dividend: 203,
+        bonusShares: 0,
+        realizedPnl: 203,
+        soldShares: 0,
+      }
+    }
+  }
+};
+
+// 手續費估算（買入總成本 × 0.001425 × 折扣0.6 ≈ 0.0855%，反推）
+// 由於試算表將手續費含入買入實付，這裡估算手續費佔比
+function estFee(totalCost, avgPrice, shares) {
+  const pure = avgPrice * shares;
+  return Math.round(totalCost - pure);
+}
+
+// ===================== 即時股價 =====================
+let prices = { '0050': null, '006208': null };
+let prevPrices = { '0050': null, '006208': null };
+
+async function fetchPrice(symbol) {
+  const ticker = symbol + '.TW';
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=2d`;
+  try {
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+    const meta = json.chart.result[0].meta;
+    return {
+      price: meta.regularMarketPrice,
+      prevClose: meta.chartPreviousClose || meta.previousClose,
+      high: meta.regularMarketDayHigh,
+      low: meta.regularMarketDayLow,
+      volume: meta.regularMarketVolume
+    };
+  } catch {
+    // fallback via allorigins proxy
+    try {
+      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+        `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=2d`
+      )}`;
+      const res2 = await fetch(proxy);
+      const json2 = await res2.json();
+      const meta = json2.chart.result[0].meta;
+      return {
+        price: meta.regularMarketPrice,
+        prevClose: meta.chartPreviousClose || meta.previousClose,
+        high: meta.regularMarketDayHigh,
+        low: meta.regularMarketDayLow,
+        volume: meta.regularMarketVolume
+      };
+    } catch { return null; }
+  }
+}
+
+function fmt(n) {
+  if (n === null || n === undefined) return '—';
+  return Math.abs(n) >= 10000
+    ? (n / 10000).toFixed(2) + '萬'
+    : n.toLocaleString('zh-TW');
+}
+function fmtFull(n) {
+  if (n === null || n === undefined) return '—';
+  return n.toLocaleString('zh-TW');
+}
+function fmtPct(n) {
+  if (n === null || n === undefined) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+}
+function pnlClass(n) { return n >= 0 ? 'pos' : 'neg'; }
+
+function updatePriceCard(symbol, data) {
+  const priceEl = document.getElementById('price-' + symbol);
+  const changeEl = document.getElementById('change-' + symbol);
+  const metaEl = document.getElementById('meta-' + symbol);
+  if (!data) {
+    priceEl.innerHTML = '<span style="font-size:13px;color:var(--red)">無法取得</span>';
+    return;
+  }
+  const prev = prevPrices[symbol];
+  prevPrices[symbol] = prices[symbol];
+  prices[symbol] = data.price;
+
+  priceEl.className = 'stock-price';
+  priceEl.textContent = data.price.toFixed(2);
+  if (prev !== null && prev !== data.price) {
+    priceEl.classList.add('flash');
+    setTimeout(() => priceEl.classList.remove('flash'), 400);
+  }
+
+  const chg = data.price - data.prevClose;
+  const chgPct = (chg / data.prevClose) * 100;
+  const cls = chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
+  const arrow = chg > 0 ? '▲' : chg < 0 ? '▼' : '—';
+  changeEl.innerHTML = `<span class="stock-change ${cls}">${arrow} ${Math.abs(chg).toFixed(2)} (${chgPct >= 0 ? '+' : ''}${chgPct.toFixed(2)}%)</span>`;
+
+  if (data.high && data.low) {
+    metaEl.textContent = `高 ${data.high.toFixed(2)}  低 ${data.low.toFixed(2)}  量 ${(data.volume/1000).toFixed(0)}張`;
+  }
+}
+
+function calcUnrealized(personKey, symbol, price) {
+  if (!price) return null;
+  const s = DATA[personKey].stocks[symbol];
+  if (!s) return null;
+  return (price - s.avgCostAdj) * s.shares;
+}
+
+function renderHoldingCard(containerId, personKey, symbol, price) {
+  const s = DATA[personKey].stocks[symbol];
+  if (!s) return;
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const unrealized = price ? (price - s.avgCostAdj) * s.shares : null;
+  const totalPnl = unrealized !== null ? unrealized + s.realizedPnl : null;
+  const pnlPct = totalPnl !== null ? (totalPnl / s.totalCost) * 100 : null;
+
+  // 手續費估算
+  const pureStockCost = Math.round(s.avgCostRaw * s.shares);
+  const feeEst = s.totalCost - pureStockCost;
+
+  const cls = symbol === '0050' ? 'holding-0050' : 'holding-006208';
+  const name = symbol === '0050' ? '元大台灣50' : '富邦台50';
+  const accentColor = symbol === '0050' ? 'var(--gold)' : 'var(--teal)';
+
+  container.innerHTML = `
+    <div class="holding-card ${cls}">
+      <div class="holding-header">
+        <div>
+          <div class="holding-ticker">${symbol}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${name}</div>
+        </div>
+        <div class="holding-pnl-badge ${totalPnl !== null ? pnlClass(totalPnl) : 'flat'}">
+          ${totalPnl !== null ? fmtPct(pnlPct) : '試算中'}
+        </div>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">持有股數</div>
+          <div class="metric-value">${s.shares.toLocaleString()}<span style="font-size:11px;color:var(--text3)"> 股</span></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">現價</div>
+          <div class="metric-value" style="color:${accentColor}">${price ? price.toFixed(2) : '—'}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">均價（原始）</div>
+          <div class="metric-value">${s.avgCostRaw.toFixed(2)}</div>
+          <div class="metric-sub">未含配股配息</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">均價（調整後）</div>
+          <div class="metric-value">${s.avgCostAdj.toFixed(2)}</div>
+          <div class="metric-sub">含配股配息扣除</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">未實現損益</div>
+          <div class="metric-value ${unrealized !== null ? pnlClass(unrealized) : ''}">
+            ${unrealized !== null ? (unrealized >= 0 ? '+' : '') + fmtFull(Math.round(unrealized)) : '計算中'}
+          </div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">已實現損益</div>
+          <div class="metric-value ${pnlClass(s.realizedPnl)}">
+            ${s.realizedPnl >= 0 ? '+' : ''}${fmtFull(s.realizedPnl)}
+          </div>
+          <div class="metric-sub">含配息 ${fmtFull(s.dividend)}</div>
+        </div>
+      </div>
+      <div class="cost-expand" onclick="toggleCost(this)">
+        <span>投入成本明細</span><span>▾</span>
+      </div>
+      <div class="cost-detail">
+        <div class="cost-row"><span class="label">買入總成本（含手續費）</span><span class="val">${fmtFull(s.totalCost)}</span></div>
+        <div class="cost-row"><span class="label">純股票價格成本</span><span class="val">${fmtFull(pureStockCost)}</span></div>
+        <div class="cost-row"><span class="label">手續費估算</span><span class="val">${feeEst >= 0 ? fmtFull(feeEst) : '—'}</span></div>
+        <div class="cost-row"><span class="label">總配息收入</span><span class="val" style="color:var(--green)">+${fmtFull(s.dividend)}</span></div>
+        <div class="cost-row"><span class="label">配股股數</span><span class="val">${s.bonusShares} 股</span></div>
+      </div>
+    </div>`;
+}
+
+function toggleCost(el) {
+  const detail = el.nextElementSibling;
+  detail.classList.toggle('open');
+  el.querySelector('span:last-child').textContent = detail.classList.contains('open') ? '▴' : '▾';
+}
+
+function renderTotalCard(containerId, personKey, price0050, price006208) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const stocks = DATA[personKey].stocks;
+  let totalCost = 0, totalRealized = 0, totalUnrealized = 0;
+
+  for (const [sym, s] of Object.entries(stocks)) {
+    totalCost += s.totalCost;
+    totalRealized += s.realizedPnl;
+    const price = sym === '0050' ? price0050 : price006208;
+    if (price) totalUnrealized += (price - s.avgCostAdj) * s.shares;
+  }
+  const totalPnl = totalRealized + totalUnrealized;
+  const rate = (totalPnl / totalCost) * 100;
+
+  container.innerHTML = `
+    <div class="total-pnl-item">
+      <div class="total-pnl-label">總投入成本</div>
+      <div class="total-pnl-value">${fmtFull(totalCost)}</div>
+    </div>
+    <div class="total-pnl-item">
+      <div class="total-pnl-label">已實現損益</div>
+      <div class="total-pnl-value ${pnlClass(totalRealized)}">${totalRealized >= 0 ? '+' : ''}${fmtFull(Math.round(totalRealized))}</div>
+    </div>
+    <div class="total-pnl-item">
+      <div class="total-pnl-label">未實現損益</div>
+      <div class="total-pnl-value ${pnlClass(totalUnrealized)}">${totalUnrealized !== 0 ? (totalUnrealized >= 0 ? '+' : '') + fmtFull(Math.round(totalUnrealized)) : '計算中'}</div>
+    </div>
+    <div class="total-pnl-item">
+      <div class="total-pnl-label">總損益 / 報酬率</div>
+      <div class="total-pnl-value ${pnlClass(totalPnl)}">${totalPnl >= 0 ? '+' : ''}${fmtFull(Math.round(totalPnl))}</div>
+      <div style="font-size:12px;margin-top:3px" class="${pnlClass(totalPnl) === 'pos' ? 'total-pnl-value pos' : 'total-pnl-value neg'}">${fmtPct(rate)}</div>
+    </div>`;
+}
+
+function updateHomeCards() {
+  const p0 = prices['0050'], p6 = prices['006208'];
+  let grandCost = 0, grandRealized = 0, grandUnrealized = 0;
+
+  for (const [key, person] of Object.entries(DATA)) {
+    let personCost = 0, personRealized = 0, personUnrealized = 0;
+    for (const [sym, s] of Object.entries(person.stocks)) {
+      const price = sym === '0050' ? p0 : p6;
+      personCost += s.totalCost;
+      personRealized += s.realizedPnl;
+      if (price) personUnrealized += (price - s.avgCostAdj) * s.shares;
+    }
+    const personTotal = personRealized + personUnrealized;
+    const personRate = (personTotal / personCost) * 100;
+    const shortKey = key === 'dad' ? 'dad' : key === 'sis' ? 'sis' : 'bro';
+
+    const pnlEl = document.getElementById('home-' + shortKey + '-pnl');
+    const rateEl = document.getElementById('home-' + shortKey + '-rate');
+    const invEl = document.getElementById('home-' + shortKey + '-invested');
+    if (pnlEl) {
+      pnlEl.className = 'person-pnl ' + pnlClass(personTotal);
+      pnlEl.textContent = (personTotal >= 0 ? '+' : '') + fmtFull(Math.round(personTotal));
+    }
+    if (rateEl) {
+      rateEl.className = 'person-rate ' + pnlClass(personTotal);
+      rateEl.textContent = fmtPct(personRate);
+    }
+    if (invEl) invEl.textContent = '總投入 ' + fmtFull(personCost);
+
+    grandCost += personCost;
+    grandRealized += personRealized;
+    grandUnrealized += personUnrealized;
+  }
+
+  const grandTotal = grandRealized + grandUnrealized;
+  const grandRate = (grandTotal / grandCost) * 100;
+
+  const set = (id, val, cls) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val;
+    if (cls) el.className = 'total-value ' + cls;
+  };
+  set('home-total-cost', fmtFull(grandCost));
+  set('home-realized', (grandRealized >= 0 ? '+' : '') + fmtFull(Math.round(grandRealized)), pnlClass(grandRealized));
+  set('home-unrealized', (grandUnrealized >= 0 ? '+' : '') + fmtFull(Math.round(grandUnrealized)), pnlClass(grandUnrealized));
+  set('home-total-pnl', (grandTotal >= 0 ? '+' : '') + fmtFull(Math.round(grandTotal)), pnlClass(grandTotal));
+  set('home-total-rate', fmtPct(grandRate), pnlClass(grandTotal));
+}
+
+function renderAllPersonPages() {
+  const p0 = prices['0050'], p6 = prices['006208'];
+  renderHoldingCard('card-dad-0050', 'dad', '0050', p0);
+  renderHoldingCard('card-dad-006208', 'dad', '006208', p6);
+  renderTotalCard('total-dad', 'dad', p0, p6);
+  renderHoldingCard('card-sis-006208', 'sis', '006208', p6);
+  renderHoldingCard('card-sis-0050', 'sis', '0050', p0);
+  renderTotalCard('total-sis', 'sis', p0, p6);
+  renderHoldingCard('card-bro-006208', 'bro', '006208', p6);
+  renderHoldingCard('card-bro-0050', 'bro', '0050', p0);
+  renderTotalCard('total-bro', 'bro', p0, p6);
+}
+
+async function refresh() {
+  const [d0, d6] = await Promise.all([
+    fetchPrice('0050'), fetchPrice('006208')
+  ]);
+  updatePriceCard('0050', d0);
+  updatePriceCard('006208', d6);
+  renderAllPersonPages();
+  updateHomeCards();
+
+  const now = new Date();
+  document.getElementById('update-time').textContent =
+    now.toTimeString().slice(0,8);
+  document.getElementById('live-dot').style.background = 'var(--green)';
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const tabs = { home: 0, dad: 1, sis: 2, bro: 3 };
+  document.querySelectorAll('.nav-tab')[tabs[id]].classList.add('active');
+}
+
+refresh();
+setInterval(refresh, 3000);
+</script>
+</body>
+</html>
