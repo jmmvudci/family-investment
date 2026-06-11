@@ -37,7 +37,7 @@
     color: var(--text);
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
-    font-size: 16px;
+    font-size: 18px;
   }
 
   /* NAV */
@@ -50,12 +50,12 @@
     display: flex; align-items: center; justify-content: space-between;
     height: 56px;
   }
-  .nav-logo { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: 0.5px; }
+  .nav-logo { font-size: 17px; font-weight: 600; color: var(--text); letter-spacing: 0.5px; }
   .nav-logo span { color: var(--gold); }
   .nav-tabs { display: flex; gap: 4px; }
   .nav-tab {
     padding: 6px 16px; border-radius: 6px; cursor: pointer;
-    font-size: 13px; color: var(--text2); transition: all 0.15s;
+    font-size: 15px; color: var(--text2); transition: all 0.15s;
     border: none; background: none;
   }
   .nav-tab:hover { background: var(--bg3); color: var(--text); }
@@ -63,7 +63,7 @@
   .nav-right { display: flex; align-items: center; gap: 12px; }
   .live-badge {
     display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text2);
+    font-size: 14px; color: var(--text2);
   }
   .live-dot {
     width: 7px; height: 7px; border-radius: 50%;
@@ -73,7 +73,7 @@
     0%,100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.5; transform: scale(0.8); }
   }
-  .update-time { font-size: 11px; color: var(--text3); }
+  .update-time { font-size: 13px; color: var(--text3); }
 
   /* PAGES */
   .page { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
@@ -83,9 +83,9 @@
   .home-hero {
     text-align: center; padding: 40px 0 32px;
   }
-  .home-title { font-size: 28px; font-weight: 300; letter-spacing: 1px; margin-bottom: 6px; }
+  .home-title { font-size: 32px; font-weight: 300; letter-spacing: 1px; margin-bottom: 6px; }
   .home-title strong { font-weight: 700; color: var(--gold); }
-  .home-sub { font-size: 13px; color: var(--text3); margin-bottom: 32px; }
+  .home-sub { font-size: 15px; color: var(--text3); margin-bottom: 32px; }
 
   /* STOCK PRICE CARDS */
   .stock-prices {
@@ -101,25 +101,25 @@
   }
   .stock-card.s0050::before { background: var(--gold); }
   .stock-card.s006208::before { background: var(--teal); }
-  .stock-ticker { font-size: 12px; color: var(--text3); letter-spacing: 1px; margin-bottom: 4px; }
-  .stock-name { font-size: 13px; color: var(--text2); margin-bottom: 12px; }
+  .stock-ticker { font-size: 14px; color: var(--text3); letter-spacing: 1px; margin-bottom: 4px; }
+  .stock-name { font-size: 15px; color: var(--text2); margin-bottom: 12px; }
   .stock-price-row { display: flex; align-items: baseline; gap: 10px; }
-  .stock-price { font-size: 42px; font-weight: 300; letter-spacing: -1px; }
+  .stock-price { font-size: 48px; font-weight: 300; letter-spacing: -1px; }
   .stock-price.loading { color: var(--text3); font-size: 24px; }
-  .price-unit { font-size: 13px; color: var(--text3); }
+  .price-unit { font-size: 15px; color: var(--text3); }
   .stock-change {
     display: inline-flex; align-items: center; gap: 4px;
-    font-size: 13px; padding: 3px 10px; border-radius: 20px;
+    font-size: 15px; padding: 3px 10px; border-radius: 20px;
     margin-top: 8px; font-weight: 500;
   }
   .stock-change.up { background: var(--green-dim); color: var(--green); }
   .stock-change.down { background: var(--red-dim); color: var(--red); }
   .stock-change.flat { background: var(--bg3); color: var(--text3); }
-  .stock-meta { font-size: 11px; color: var(--text3); margin-top: 10px; }
+  .stock-meta { font-size: 13px; color: var(--text3); margin-top: 10px; }
 
   /* SUMMARY TABLE */
   .section-title {
-    font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+    font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase;
     color: var(--text3); margin-bottom: 14px; padding-bottom: 8px;
     border-bottom: 1px solid var(--border);
   }
@@ -140,16 +140,16 @@
   .avatar-dad { background: var(--gold-dim); color: var(--gold); }
   .avatar-sis { background: var(--purple-dim); color: var(--purple); }
   .avatar-bro { background: var(--teal-dim); color: var(--teal); }
-  .person-name { font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+  .person-name { font-size: 16px; font-weight: 500; margin-bottom: 12px; }
   .person-pnl {
-    font-size: 26px; font-weight: 300; margin-bottom: 2px;
+    font-size: 30px; font-weight: 300; margin-bottom: 2px;
   }
   .person-pnl.pos { color: var(--green); }
   .person-pnl.neg { color: var(--red); }
-  .person-rate { font-size: 12px; }
+  .person-rate { font-size: 14px; }
   .person-rate.pos { color: var(--green); }
   .person-rate.neg { color: var(--red); }
-  .person-invested { font-size: 11px; color: var(--text3); margin-top: 8px; }
+  .person-invested { font-size: 13px; color: var(--text3); margin-top: 8px; }
 
   /* TOTAL SUMMARY */
   .total-bar {
@@ -160,8 +160,8 @@
   .total-item { flex: 1; padding: 0 20px; border-right: 1px solid var(--border); }
   .total-item:first-child { padding-left: 0; }
   .total-item:last-child { border-right: none; }
-  .total-label { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
-  .total-value { font-size: 22px; font-weight: 500; }
+  .total-label { font-size: 13px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
+  .total-value { font-size: 24px; font-weight: 500; }
   .total-value.pos { color: var(--green); }
   .total-value.neg { color: var(--red); }
 
@@ -175,8 +175,8 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 20px; font-weight: 600;
   }
-  .person-header h1 { font-size: 22px; font-weight: 500; }
-  .person-header p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .person-header h1 { font-size: 26px; font-weight: 500; }
+  .person-header p { font-size: 15px; color: var(--text2); margin-top: 2px; }
 
   /* HOLDINGS */
   .holdings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
@@ -191,12 +191,12 @@
   .holding-006208::before { background: var(--teal); }
   .holding-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
   .holding-ticker {
-    font-size: 18px; font-weight: 600; letter-spacing: 0.5px;
+    font-size: 22px; font-weight: 600; letter-spacing: 0.5px;
   }
   .holding-0050 .holding-ticker { color: var(--gold); }
   .holding-006208 .holding-ticker { color: var(--teal); }
   .holding-pnl-badge {
-    font-size: 13px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
+    font-size: 15px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
   }
   .holding-pnl-badge.pos { background: var(--green-dim); color: var(--green); }
   .holding-pnl-badge.neg { background: var(--red-dim); color: var(--red); }
@@ -205,18 +205,18 @@
   .metric {
     background: var(--bg3); border-radius: var(--radius-sm); padding: 10px 12px;
   }
-  .metric-label { font-size: 12px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 4px; }
-  .metric-value { font-size: 17px; font-weight: 500; }
+  .metric-label { font-size: 14px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 4px; }
+  .metric-value { font-size: 20px; font-weight: 500; }
   .metric-value.pos { color: var(--green); }
   .metric-value.neg { color: var(--red); }
-  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .metric-sub { font-size: 13px; color: var(--text3); margin-top: 2px; }
 
   /* COST BREAKDOWN */
   .cost-expand {
     background: var(--bg3); border-radius: var(--radius-sm);
     padding: 10px 12px; margin-top: 10px; cursor: pointer;
     display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; color: var(--text2); user-select: none;
+    font-size: 13px; color: var(--text2); user-select: none;
   }
   .cost-expand:hover { background: var(--card2); }
   .cost-detail {
@@ -226,7 +226,7 @@
   .cost-detail.open { display: block; }
   .cost-row {
     display: flex; justify-content: space-between;
-    font-size: 12px; padding: 5px 0;
+    font-size: 14px; padding: 5px 0;
     border-bottom: 1px solid var(--border);
   }
   .cost-row:last-child { border-bottom: none; }
@@ -242,8 +242,8 @@
   .total-pnl-item { padding: 0 20px; border-right: 1px solid var(--border); }
   .total-pnl-item:first-child { padding-left: 0; }
   .total-pnl-item:last-child { border-right: none; }
-  .total-pnl-label { font-size: 12px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
-  .total-pnl-value { font-size: 20px; font-weight: 500; }
+  .total-pnl-label { font-size: 14px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
+  .total-pnl-value { font-size: 22px; font-weight: 500; }
   .total-pnl-value.pos { color: var(--green); }
   .total-pnl-value.neg { color: var(--red); }
 
@@ -536,52 +536,88 @@ let prices = { '0050': null, '006208': null };
 let prevPrices = { '0050': null, '006208': null };
 
 async function fetchPrice(symbol) {
+  // 方法1: 台灣證交所 TWSE
   try {
     const res = await fetch(
       `https://mis.twse.com.tw/stock/api/getStockInfo.asp?ex_ch=tse_${symbol}.tw&json=1&delay=0`,
-      { signal: AbortSignal.timeout(6000) }
+      { signal: AbortSignal.timeout(8000) }
     );
     if (!res.ok) throw new Error();
     const json = await res.json();
     const d = json?.msgArray?.[0];
-    if (!d) throw new Error('no data');
-
-    const prevClose = parseFloat(d.y);   // 昨收
+    if (!d) throw new Error();
+    const prevClose = parseFloat(d.y);
     const high = parseFloat(d.h);
     const low = parseFloat(d.l);
     const volume = parseInt(d.v) || 0;
-
-    // 盤中用成交價 z，收盤或盤前用收盤價 c
     let price = parseFloat(d.z);
-    if (isNaN(price) || d.z === '-') {
-      price = parseFloat(d.c);  // 當日收盤價（收盤後才有）
-    }
-    if (isNaN(price) || d.c === '-') {
-      price = prevClose;         // 最後備援：昨收
-    }
-    if (isNaN(price)) throw new Error('invalid price');
-
+    if (isNaN(price) || d.z === '-') price = parseFloat(d.c);
+    if (isNaN(price) || d.c === '-') price = prevClose;
+    if (isNaN(price)) throw new Error();
     return { price, prevClose, high, low, volume };
-  } catch {
-    // 備援：鉅亨網 API
-    try {
-      const res2 = await fetch(
-        `https://ws.api.cnyes.com/ws/api/v1/quote/quotes/TWS:${symbol}:STOCK?column=C,H,L,O,REFP,V`,
-        { signal: AbortSignal.timeout(6000) }
-      );
-      if (!res2.ok) throw new Error();
-      const j2 = await res2.json();
-      const data = j2?.data?.items?.[0];
-      if (!data) throw new Error();
-      return {
-        price: parseFloat(data.C),
-        prevClose: parseFloat(data.REFP || data.C),
-        high: parseFloat(data.H),
-        low: parseFloat(data.L),
-        volume: parseInt(data.V) || 0
-      };
-    } catch { return null; }
-  }
+  } catch {}
+
+  // 方法2: Yahoo Finance via corsproxy.io
+  try {
+    const yahoo = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?interval=1d&range=2d`;
+    const res = await fetch(
+      `https://corsproxy.io/?${encodeURIComponent(yahoo)}`,
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+    const meta = json?.chart?.result?.[0]?.meta;
+    if (!meta?.regularMarketPrice) throw new Error();
+    return {
+      price: meta.regularMarketPrice,
+      prevClose: meta.chartPreviousClose || meta.regularMarketPrice,
+      high: meta.regularMarketDayHigh,
+      low: meta.regularMarketDayLow,
+      volume: meta.regularMarketVolume || 0
+    };
+  } catch {}
+
+  // 方法3: Yahoo Finance via allorigins
+  try {
+    const yahoo = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}.TW?interval=1d&range=2d`;
+    const res = await fetch(
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahoo)}`,
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+    const meta = json?.chart?.result?.[0]?.meta;
+    if (!meta?.regularMarketPrice) throw new Error();
+    return {
+      price: meta.regularMarketPrice,
+      prevClose: meta.chartPreviousClose || meta.regularMarketPrice,
+      high: meta.regularMarketDayHigh,
+      low: meta.regularMarketDayLow,
+      volume: meta.regularMarketVolume || 0
+    };
+  } catch {}
+
+  // 方法4: Yahoo Finance v7 via thingproxy
+  try {
+    const yahoo = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}.TW`;
+    const res = await fetch(
+      `https://thingproxy.freeboard.io/fetch/${yahoo}`,
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+    const q = json?.quoteResponse?.result?.[0];
+    if (!q) throw new Error();
+    return {
+      price: q.regularMarketPrice,
+      prevClose: q.regularMarketPreviousClose || q.regularMarketPrice,
+      high: q.regularMarketDayHigh,
+      low: q.regularMarketDayLow,
+      volume: q.regularMarketVolume || 0
+    };
+  } catch {}
+
+  return null;
 }
 
 function fmt(n) {
