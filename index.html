@@ -16,10 +16,14 @@
     --text: #1a1c24;
     --text2: #5a5f75;
     --text3: #9499b0;
-    --green: #0f9e5e;
-    --green-dim: rgba(15,158,94,0.10);
-    --red: #d93025;
-    --red-dim: rgba(217,48,37,0.09);
+    --up: #d93025;
+    --up-dim: rgba(217,48,37,0.09);
+    --down: #0f9e5e;
+    --down-dim: rgba(15,158,94,0.10);
+    --pos: #0f9e5e;
+    --pos-dim: rgba(15,158,94,0.10);
+    --neg: #d93025;
+    --neg-dim: rgba(217,48,37,0.09);
     --gold: #b8860b;
     --gold-dim: rgba(184,134,11,0.10);
     --blue: #1a6fd4;
@@ -32,230 +36,158 @@
     --radius-sm: 8px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    min-height: 100vh;
-    font-size: 18px;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; min-height: 100vh; font-size: 18px; }
 
   /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(245,246,248,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 56px;
-  }
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(245,246,248,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
   .nav-logo { font-size: 17px; font-weight: 600; color: var(--text); letter-spacing: 0.5px; }
   .nav-logo span { color: var(--gold); }
   .nav-tabs { display: flex; gap: 4px; }
-  .nav-tab {
-    padding: 6px 16px; border-radius: 6px; cursor: pointer;
-    font-size: 15px; color: var(--text2); transition: all 0.15s;
-    border: none; background: none;
-  }
+  .nav-tab { padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 15px; color: var(--text2); transition: all 0.15s; border: none; background: none; }
   .nav-tab:hover { background: var(--bg3); color: var(--text); }
-  .nav-tab.active { background: var(--card2); color: var(--text); }
+  .nav-tab.active { background: var(--card2); color: var(--text); font-weight: 600; }
   .nav-right { display: flex; align-items: center; gap: 12px; }
-  .live-badge {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 14px; color: var(--text2);
-  }
-  .live-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--green); animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
+  .live-badge { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text2); }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--down); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
   .update-time { font-size: 13px; color: var(--text3); }
 
   /* PAGES */
   .page { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
   .page.active { display: block; }
 
-  /* HOME PAGE */
-  .home-hero {
-    text-align: center; padding: 40px 0 32px;
-  }
+  /* HOME */
+  .home-hero { text-align: center; padding: 32px 0 24px; }
   .home-title { font-size: 32px; font-weight: 300; letter-spacing: 1px; margin-bottom: 6px; }
   .home-title strong { font-weight: 700; color: var(--gold); }
-  .home-sub { font-size: 15px; color: var(--text3); margin-bottom: 32px; }
+  .home-sub { font-size: 15px; color: var(--text3); margin-bottom: 24px; }
 
   /* STOCK PRICE CARDS */
-  .stock-prices {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;
-  }
-  .stock-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px 24px;
-    position: relative; overflow: hidden;
-  }
-  .stock-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  }
+  .stock-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .stock-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; position: relative; overflow: hidden; }
+  .stock-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
   .stock-card.s0050::before { background: var(--gold); }
   .stock-card.s006208::before { background: var(--teal); }
-  .stock-ticker { font-size: 14px; color: var(--text3); letter-spacing: 1px; margin-bottom: 4px; }
-  .stock-name { font-size: 15px; color: var(--text2); margin-bottom: 12px; }
+  .stock-ticker { font-size: 14px; color: var(--text3); letter-spacing: 1px; margin-bottom: 2px; }
+  .stock-name { font-size: 15px; color: var(--text2); margin-bottom: 10px; }
   .stock-price-row { display: flex; align-items: baseline; gap: 10px; }
   .stock-price { font-size: 48px; font-weight: 300; letter-spacing: -1px; }
-  .stock-price.loading { color: var(--text3); font-size: 24px; }
+  .stock-price.up { color: var(--up); }
+  .stock-price.down { color: var(--down); }
   .price-unit { font-size: 15px; color: var(--text3); }
-  .stock-change {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 15px; padding: 3px 10px; border-radius: 20px;
-    margin-top: 8px; font-weight: 500;
-  }
-  .stock-change.up { background: var(--green-dim); color: var(--green); }
-  .stock-change.down { background: var(--red-dim); color: var(--red); }
+  .stock-change { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; padding: 3px 10px; border-radius: 20px; margin-top: 8px; font-weight: 500; }
+  .stock-change.up { background: var(--up-dim); color: var(--up); }
+  .stock-change.down { background: var(--down-dim); color: var(--down); }
   .stock-change.flat { background: var(--bg3); color: var(--text3); }
-  .stock-meta { font-size: 13px; color: var(--text3); margin-top: 10px; }
+  .stock-meta { font-size: 13px; color: var(--text3); margin-top: 8px; }
+  .stock-daily-pnl { font-size: 13px; margin-top: 6px; font-weight: 500; }
+  .stock-daily-pnl.up { color: var(--up); }
+  .stock-daily-pnl.down { color: var(--down); }
 
-  /* SUMMARY TABLE */
-  .section-title {
-    font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--text3); margin-bottom: 14px; padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .summary-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
-  }
-  .person-summary {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px 18px; cursor: pointer;
-    transition: border-color 0.15s;
-  }
-  .person-summary:hover { border-color: var(--border2); }
-  .person-avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 600; margin-bottom: 12px;
-  }
-  .avatar-dad { background: var(--gold-dim); color: var(--gold); }
-  .avatar-sis { background: var(--purple-dim); color: var(--purple); }
-  .avatar-bro { background: var(--teal-dim); color: var(--teal); }
-  .person-name { font-size: 16px; font-weight: 500; margin-bottom: 12px; }
-  .person-pnl {
-    font-size: 30px; font-weight: 300; margin-bottom: 2px;
-  }
-  .person-pnl.pos { color: var(--green); }
-  .person-pnl.neg { color: var(--red); }
-  .person-rate { font-size: 14px; }
-  .person-rate.pos { color: var(--green); }
-  .person-rate.neg { color: var(--red); }
-  .person-invested { font-size: 13px; color: var(--text3); margin-top: 8px; }
+  /* SECTION TITLE */
+  .section-title { font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
-  /* TOTAL SUMMARY */
-  .total-bar {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px 24px;
-    display: flex; gap: 0; margin-bottom: 32px;
-  }
+  /* TOTAL BAR */
+  .total-bar { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; display: flex; gap: 0; margin-bottom: 24px; }
   .total-item { flex: 1; padding: 0 20px; border-right: 1px solid var(--border); }
   .total-item:first-child { padding-left: 0; }
   .total-item:last-child { border-right: none; }
   .total-label { font-size: 13px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
-  .total-value { font-size: 24px; font-weight: 500; }
-  .total-value.pos { color: var(--green); }
-  .total-value.neg { color: var(--red); }
+  .total-value { font-size: 22px; font-weight: 500; }
+  .total-value.pos { color: var(--pos); }
+  .total-value.neg { color: var(--neg); }
+
+  /* PERSON SUMMARY */
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .person-summary { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; cursor: pointer; transition: border-color 0.15s; }
+  .person-summary:hover { border-color: var(--border2); }
+  .person-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  .avatar-dad { background: var(--gold-dim); color: var(--gold); }
+  .avatar-sis { background: var(--purple-dim); color: var(--purple); }
+  .avatar-bro { background: var(--teal-dim); color: var(--teal); }
+  .person-name { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .person-pnl { font-size: 28px; font-weight: 300; margin-bottom: 2px; }
+  .person-pnl.pos { color: var(--pos); }
+  .person-pnl.neg { color: var(--neg); }
+  .person-rate { font-size: 14px; }
+  .person-rate.pos { color: var(--pos); }
+  .person-rate.neg { color: var(--neg); }
+  .person-daily { font-size: 13px; margin-top: 4px; }
+  .person-daily.up { color: var(--up); }
+  .person-daily.down { color: var(--down); }
+  .person-invested { font-size: 13px; color: var(--text3); margin-top: 6px; }
 
   /* PERSON PAGE */
-  .person-header {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
-    padding-bottom: 20px; border-bottom: 1px solid var(--border);
-  }
-  .person-header-avatar {
-    width: 52px; height: 52px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 600;
-  }
+  .person-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .person-header-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; }
   .person-header h1 { font-size: 26px; font-weight: 500; }
   .person-header p { font-size: 15px; color: var(--text2); margin-top: 2px; }
 
   /* HOLDINGS */
   .holdings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .holding-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px; position: relative; overflow: hidden;
-  }
-  .holding-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  }
+  .holding-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: relative; overflow: hidden; }
+  .holding-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
   .holding-0050::before { background: var(--gold); }
   .holding-006208::before { background: var(--teal); }
   .holding-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-  .holding-ticker {
-    font-size: 22px; font-weight: 600; letter-spacing: 0.5px;
-  }
+  .holding-ticker { font-size: 22px; font-weight: 600; letter-spacing: 0.5px; }
   .holding-0050 .holding-ticker { color: var(--gold); }
   .holding-006208 .holding-ticker { color: var(--teal); }
-  .holding-pnl-badge {
-    font-size: 15px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
-  }
-  .holding-pnl-badge.pos { background: var(--green-dim); color: var(--green); }
-  .holding-pnl-badge.neg { background: var(--red-dim); color: var(--red); }
-
+  .holding-pnl-badge { font-size: 15px; font-weight: 500; padding: 4px 12px; border-radius: 20px; }
+  .holding-pnl-badge.pos { background: var(--pos-dim); color: var(--pos); }
+  .holding-pnl-badge.neg { background: var(--neg-dim); color: var(--neg); }
   .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .metric {
-    background: var(--bg3); border-radius: var(--radius-sm); padding: 10px 12px;
-  }
+  .metric { background: var(--bg3); border-radius: var(--radius-sm); padding: 10px 12px; }
   .metric-label { font-size: 14px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 4px; }
   .metric-value { font-size: 20px; font-weight: 500; }
-  .metric-value.pos { color: var(--green); }
-  .metric-value.neg { color: var(--red); }
+  .metric-value.pos { color: var(--pos); }
+  .metric-value.neg { color: var(--neg); }
   .metric-sub { font-size: 13px; color: var(--text3); margin-top: 2px; }
 
   /* COST BREAKDOWN */
-  .cost-expand {
-    background: var(--bg3); border-radius: var(--radius-sm);
-    padding: 10px 12px; margin-top: 10px; cursor: pointer;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 13px; color: var(--text2); user-select: none;
-  }
+  .cost-expand { background: var(--bg3); border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text2); user-select: none; }
   .cost-expand:hover { background: var(--card2); }
-  .cost-detail {
-    background: var(--bg3); border-radius: var(--radius-sm);
-    padding: 12px; margin-top: 6px; display: none;
-  }
+  .cost-detail { background: var(--bg3); border-radius: var(--radius-sm); padding: 12px; margin-top: 6px; display: none; }
   .cost-detail.open { display: block; }
-  .cost-row {
-    display: flex; justify-content: space-between;
-    font-size: 14px; padding: 5px 0;
-    border-bottom: 1px solid var(--border);
-  }
+  .cost-row { display: flex; justify-content: space-between; font-size: 14px; padding: 5px 0; border-bottom: 1px solid var(--border); }
   .cost-row:last-child { border-bottom: none; }
   .cost-row .label { color: var(--text2); }
   .cost-row .val { font-weight: 500; }
 
   /* TOTAL PNL CARD */
-  .total-pnl-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px 24px;
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
-  }
+  .total-pnl-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
   .total-pnl-item { padding: 0 20px; border-right: 1px solid var(--border); }
   .total-pnl-item:first-child { padding-left: 0; }
   .total-pnl-item:last-child { border-right: none; }
   .total-pnl-label { font-size: 14px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; }
   .total-pnl-value { font-size: 22px; font-weight: 500; }
-  .total-pnl-value.pos { color: var(--green); }
-  .total-pnl-value.neg { color: var(--red); }
+  .total-pnl-value.pos { color: var(--pos); }
+  .total-pnl-value.neg { color: var(--neg); }
+
+  /* DETAIL PAGE */
+  .detail-filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border2); background: var(--card); color: var(--text2); font-size: 14px; cursor: pointer; transition: all 0.15s; }
+  .filter-btn:hover { background: var(--bg3); }
+  .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+  .detail-table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .detail-table { width: 100%; border-collapse: collapse; }
+  .detail-table th { background: var(--bg3); padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text3); letter-spacing: 0.5px; font-weight: 600; }
+  .detail-table td { padding: 11px 16px; font-size: 15px; border-top: 1px solid var(--border); }
+  .detail-table tr:hover td { background: var(--bg2); }
+  .badge-buy { background: var(--up-dim); color: var(--up); padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+  .badge-sell { background: var(--down-dim); color: var(--down); padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+  .detail-count { font-size: 13px; color: var(--text3); margin-bottom: 10px; }
+  .no-data { text-align: center; padding: 40px; color: var(--text3); font-size: 16px; }
 
   /* RESPONSIVE */
   @media (max-width: 768px) {
-    nav { padding: 0 16px; }
+    nav { padding: 0 12px; }
     .nav-tabs { gap: 2px; }
-    .nav-tab { padding: 6px 10px; font-size: 12px; }
-    .page { padding: 16px; }
+    .nav-tab { padding: 6px 8px; font-size: 12px; }
+    .page { padding: 14px; }
     .stock-prices { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stock-price { font-size: 26px; }
-    .summary-grid { grid-template-columns: 1fr; gap: 10px; }
+    .stock-price { font-size: 28px; }
+    .summary-grid { grid-template-columns: 1fr; }
     .holdings-grid { grid-template-columns: 1fr; }
     .total-bar { flex-direction: column; gap: 12px; }
     .total-item { border-right: none; padding: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
@@ -264,22 +196,16 @@
     .total-pnl-item { border-right: none; padding: 0; }
     .total-pnl-item:nth-child(odd) { border-right: 1px solid var(--border); padding-right: 16px; }
     .home-title { font-size: 22px; }
+    .detail-table th, .detail-table td { padding: 8px 10px; font-size: 13px; }
   }
   @media (max-width: 480px) {
     .stock-prices { grid-template-columns: 1fr; }
-    .metrics-grid { grid-template-columns: 1fr 1fr; }
   }
 
-  .spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid var(--border2); border-top-color: var(--gold);
-    border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle;
-  }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error-msg { font-size: 12px; color: var(--red); margin-top: 6px; }
   .flash { animation: flash 0.4s ease; }
-  @keyframes flash { 0%,100% { opacity:1; } 50% { opacity: 0.4; } }
+  @keyframes flash { 0%,100%{opacity:1;}50%{opacity:0.4;} }
 </style>
 </head>
 <body>
@@ -291,9 +217,10 @@
     <button class="nav-tab" onclick="showPage('dad')">爸爸</button>
     <button class="nav-tab" onclick="showPage('sis')">姐姐</button>
     <button class="nav-tab" onclick="showPage('bro')">弟弟</button>
+    <button class="nav-tab" onclick="showPage('detail')">明細</button>
   </div>
   <div class="nav-right">
-    <div class="update-time" id="data-source" style="font-size:12px;color:var(--text3)">載入試算表中...</div>
+    <div class="update-time" id="data-source" style="font-size:12px;color:var(--text3)">載入中...</div>
     <div class="live-badge">
       <div class="live-dot" id="live-dot"></div>
       <span>即時</span>
@@ -309,39 +236,43 @@
     <div class="home-sub">0050 · 006208 · 即時更新</div>
   </div>
 
-  <!-- STOCK PRICE CARDS -->
   <div class="stock-prices">
     <div class="stock-card s0050">
       <div class="stock-ticker">0050.TW</div>
       <div class="stock-name">元大台灣50</div>
       <div class="stock-price-row">
-        <div class="stock-price loading" id="price-0050"><span class="spinner"></span></div>
+        <div class="stock-price" id="price-0050"><span class="spinner"></span></div>
         <div class="price-unit">TWD</div>
       </div>
       <div id="change-0050"></div>
+      <div class="stock-daily-pnl" id="daily-pnl-0050"></div>
       <div class="stock-meta" id="meta-0050"></div>
     </div>
     <div class="stock-card s006208">
       <div class="stock-ticker">006208.TW</div>
       <div class="stock-name">富邦台50</div>
       <div class="stock-price-row">
-        <div class="stock-price loading" id="price-006208"><span class="spinner"></span></div>
+        <div class="stock-price" id="price-006208"><span class="spinner"></span></div>
         <div class="price-unit">TWD</div>
       </div>
       <div id="change-006208"></div>
+      <div class="stock-daily-pnl" id="daily-pnl-006208"></div>
       <div class="stock-meta" id="meta-006208"></div>
     </div>
   </div>
 
-  <!-- TOTAL BAR -->
   <div class="section-title">全家投資概況</div>
   <div class="total-bar">
+    <div class="total-item">
+      <div class="total-label">目前總市值</div>
+      <div class="total-value" id="home-total-mkt">—</div>
+    </div>
     <div class="total-item">
       <div class="total-label">總投入成本</div>
       <div class="total-value" id="home-total-cost">—</div>
     </div>
     <div class="total-item">
-      <div class="total-label">已實現損益（含配息）</div>
+      <div class="total-label">已實現損益</div>
       <div class="total-value" id="home-realized">—</div>
     </div>
     <div class="total-item">
@@ -358,7 +289,6 @@
     </div>
   </div>
 
-  <!-- PERSON SUMMARY CARDS -->
   <div class="section-title">個人概況</div>
   <div class="summary-grid">
     <div class="person-summary" onclick="showPage('dad')">
@@ -366,6 +296,7 @@
       <div class="person-name">爸爸</div>
       <div class="person-pnl" id="home-dad-pnl">—</div>
       <div class="person-rate" id="home-dad-rate">—</div>
+      <div class="person-daily" id="home-dad-daily"></div>
       <div class="person-invested" id="home-dad-invested">—</div>
     </div>
     <div class="person-summary" onclick="showPage('sis')">
@@ -373,6 +304,7 @@
       <div class="person-name">姐姐</div>
       <div class="person-pnl" id="home-sis-pnl">—</div>
       <div class="person-rate" id="home-sis-rate">—</div>
+      <div class="person-daily" id="home-sis-daily"></div>
       <div class="person-invested" id="home-sis-invested">—</div>
     </div>
     <div class="person-summary" onclick="showPage('bro')">
@@ -380,6 +312,7 @@
       <div class="person-name">弟弟</div>
       <div class="person-pnl" id="home-bro-pnl">—</div>
       <div class="person-rate" id="home-bro-rate">—</div>
+      <div class="person-daily" id="home-bro-daily"></div>
       <div class="person-invested" id="home-bro-invested">—</div>
     </div>
   </div>
@@ -389,10 +322,7 @@
 <div class="page" id="page-dad">
   <div class="person-header">
     <div class="person-header-avatar avatar-dad">爸</div>
-    <div>
-      <h1>爸爸</h1>
-      <p>持有 0050 · 006208</p>
-    </div>
+    <div><h1>爸爸</h1><p>持有 0050 · 006208</p></div>
   </div>
   <div class="section-title" style="margin-bottom:14px">持股明細</div>
   <div class="holdings-grid">
@@ -407,10 +337,7 @@
 <div class="page" id="page-sis">
   <div class="person-header">
     <div class="person-header-avatar avatar-sis">姐</div>
-    <div>
-      <h1>姐姐</h1>
-      <p>持有 006208 · 0050</p>
-    </div>
+    <div><h1>姐姐</h1><p>持有 006208 · 0050</p></div>
   </div>
   <div class="section-title" style="margin-bottom:14px">持股明細</div>
   <div class="holdings-grid">
@@ -425,10 +352,7 @@
 <div class="page" id="page-bro">
   <div class="person-header">
     <div class="person-header-avatar avatar-bro">弟</div>
-    <div>
-      <h1>弟弟</h1>
-      <p>持有 006208 · 0050</p>
-    </div>
+    <div><h1>弟弟</h1><p>持有 006208 · 0050</p></div>
   </div>
   <div class="section-title" style="margin-bottom:14px">持股明細</div>
   <div class="holdings-grid">
@@ -439,30 +363,70 @@
   <div class="total-pnl-card" id="total-bro"></div>
 </div>
 
+<!-- DETAIL PAGE -->
+<div class="page" id="page-detail">
+  <div class="home-hero" style="padding:20px 0 16px">
+    <div class="home-title" style="font-size:24px">買賣 <strong>明細查詢</strong></div>
+  </div>
+  <div class="detail-filters">
+    <div style="font-size:14px;color:var(--text3);padding:8px 4px;align-self:center">人員：</div>
+    <button class="filter-btn active" onclick="setFilter('person','all',this)">全部</button>
+    <button class="filter-btn" onclick="setFilter('person','dad',this)">爸爸</button>
+    <button class="filter-btn" onclick="setFilter('person','sis',this)">姐姐</button>
+    <button class="filter-btn" onclick="setFilter('person','bro',this)">弟弟</button>
+    <div style="font-size:14px;color:var(--text3);padding:8px 4px;align-self:center;margin-left:8px">股票：</div>
+    <button class="filter-btn active" onclick="setFilter('symbol','all',this)">全部</button>
+    <button class="filter-btn" onclick="setFilter('symbol','0050',this)">0050</button>
+    <button class="filter-btn" onclick="setFilter('symbol','006208',this)">006208</button>
+    <div style="font-size:14px;color:var(--text3);padding:8px 4px;align-self:center;margin-left:8px">類型：</div>
+    <button class="filter-btn active" onclick="setFilter('type','all',this)">全部</button>
+    <button class="filter-btn" onclick="setFilter('type','buy',this)">買入</button>
+    <button class="filter-btn" onclick="setFilter('type','sell',this)">賣出</button>
+  </div>
+  <div class="detail-count" id="detail-count"></div>
+  <div class="detail-table-wrap">
+    <table class="detail-table">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>人員</th>
+          <th>股票</th>
+          <th>類型</th>
+          <th>股數</th>
+          <th>價格</th>
+          <th>手續費</th>
+          <th>實付/實收</th>
+        </tr>
+      </thead>
+      <tbody id="detail-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
 <script>
-// ===================== Apps Script API 設定 =====================
-// 部署後把 Web App URL 貼在這裡
+// ===================== Apps Script API =====================
 let APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaMSqk9yANsr7nact5w4ZisW2aS8b01apSvC7W_2Drj-tuCHVHhLy_0l-RSMRABvL42g/exec';
 
-// 備用靜態資料（API 尚未設定或載入失敗時使用）
 const FALLBACK_DATA = {
   dad: { name: '爸爸', stocks: {
-    '0050':   { shares:71550, totalCost:2809117, avgCostRaw:47.52, avgCostAdj:38.04, dividend:87192,  bonusShares:0, realizedPnl:87192,  soldShares:0 },
-    '006208': { shares:2618,  totalCost:262219,  avgCostRaw:100.16,avgCostAdj:95.71, dividend:11640,  bonusShares:0, realizedPnl:11640,  soldShares:0 }
+    '0050':   { shares:71550, totalCost:2809117, avgCostRaw:47.52, avgCostAdj:38.04, dividend:87192, bonusShares:0, realizedPnl:87192, soldShares:0 },
+    '006208': { shares:2618,  totalCost:262219,  avgCostRaw:100.16,avgCostAdj:95.71, dividend:11640, bonusShares:0, realizedPnl:11640, soldShares:0 }
   }},
   sis: { name: '姐姐', stocks: {
-    '006208': { shares:1310,  totalCost:147884,  avgCostRaw:112.89,avgCostAdj:108.82,dividend:5324,   bonusShares:0, realizedPnl:5324,   soldShares:0 },
-    '0050':   { shares:188,   totalCost:10325,   avgCostRaw:54.92, avgCostAdj:53.84, dividend:203,    bonusShares:0, realizedPnl:203,    soldShares:0 }
+    '006208': { shares:1310, totalCost:147884, avgCostRaw:112.89, avgCostAdj:108.82, dividend:5324, bonusShares:0, realizedPnl:5324, soldShares:0 },
+    '0050':   { shares:188,  totalCost:10325,  avgCostRaw:54.92,  avgCostAdj:53.84,  dividend:203,  bonusShares:0, realizedPnl:203,  soldShares:0 }
   }},
   bro: { name: '弟弟', stocks: {
-    '006208': { shares:1223,  totalCost:140669,  avgCostRaw:115.02,avgCostAdj:110.98,dividend:4941,   bonusShares:0, realizedPnl:4941,   soldShares:0 },
-    '0050':   { shares:164,   totalCost:7917,    avgCostRaw:48.27, avgCostAdj:47.04, dividend:203,    bonusShares:0, realizedPnl:203,    soldShares:0 }
+    '006208': { shares:1223, totalCost:140669, avgCostRaw:115.02, avgCostAdj:110.98, dividend:4941, bonusShares:0, realizedPnl:4941, soldShares:0 },
+    '0050':   { shares:164,  totalCost:7917,   avgCostRaw:48.27,  avgCostAdj:47.04,  dividend:203,  bonusShares:0, realizedPnl:203,  soldShares:0 }
   }}
 };
 
 let DATA = JSON.parse(JSON.stringify(FALLBACK_DATA));
 
-// 從 Apps Script 載入最新資料
+// 買賣明細（從試算表讀取後填入）
+let TRANSACTIONS = [];
+
 async function loadSheetData() {
   if (!APPS_SCRIPT_URL) return false;
   try {
@@ -470,51 +434,46 @@ async function loadSheetData() {
     if (!res.ok) throw new Error();
     const json = await res.json();
 
-    // 把 API 回傳資料合併進 DATA
     for (const person of ['dad', 'sis', 'bro']) {
       if (!json[person]) continue;
       for (const symbol of ['0050', '006208']) {
         if (!json[person][symbol]) continue;
         const s = json[person][symbol];
         DATA[person].stocks[symbol] = {
-          shares:       s.shares       || 0,
-          totalCost:    s.totalCost    || 0,
-          avgCostRaw:   s.avgCostRaw   || 0,
-          avgCostAdj:   s.avgCostAdj   || 0,
-          dividend:     s.dividend     || 0,
-          bonusShares:  s.bonusShares  || 0,
-          realizedPnl:  s.realizedPnl  || 0,
-          soldShares:   s.soldShares   || 0,
+          shares: s.shares||0, totalCost: s.totalCost||0,
+          avgCostRaw: s.avgCostRaw||0, avgCostAdj: s.avgCostAdj||0,
+          dividend: s.dividend||0, bonusShares: s.bonusShares||0,
+          realizedPnl: s.realizedPnl||0, soldShares: s.soldShares||0,
         };
       }
     }
 
-    // 顯示資料來源標記
+    // 買賣明細
+    if (json.transactions) {
+      TRANSACTIONS = json.transactions;
+      renderDetailTable();
+    }
+
     const el = document.getElementById('data-source');
     if (el) {
       const t = new Date(json.updatedAt);
-      el.textContent = '試算表同步：' + t.toLocaleString('zh-TW');
-      el.style.color = 'var(--green)';
+      el.textContent = '同步：' + t.toLocaleTimeString('zh-TW');
+      el.style.color = 'var(--pos)';
     }
     return true;
   } catch {
     const el = document.getElementById('data-source');
-    if (el) { el.textContent = '使用備用資料'; el.style.color = 'var(--text3)'; }
+    if (el) { el.textContent = '備用資料'; el.style.color = 'var(--text3)'; }
     return false;
   }
-}
-
-function estFee(totalCost, avgPrice, shares) {
-  const pure = avgPrice * shares;
-  return Math.round(totalCost - pure);
 }
 
 // ===================== 即時股價 =====================
 let prices = { '0050': null, '006208': null };
 let prevPrices = { '0050': null, '006208': null };
+let priceData = { '0050': null, '006208': null };
 
 async function fetchPrice(symbol) {
-  // 方法1: 台灣證交所 TWSE
   try {
     const res = await fetch(
       `https://mis.twse.com.tw/stock/api/getStockInfo.asp?ex_ch=tse_${symbol}.tw&json=1&delay=0`,
@@ -534,142 +493,109 @@ async function fetchPrice(symbol) {
     if (isNaN(price)) throw new Error();
     return { price, prevClose, high, low, volume };
   } catch {}
-
-  // 方法2: Yahoo Finance via corsproxy.io
   try {
     const yahoo = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?interval=1d&range=2d`;
-    const res = await fetch(
-      `https://corsproxy.io/?${encodeURIComponent(yahoo)}`,
-      { signal: AbortSignal.timeout(8000) }
-    );
+    const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(yahoo)}`, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) throw new Error();
     const json = await res.json();
     const meta = json?.chart?.result?.[0]?.meta;
     if (!meta?.regularMarketPrice) throw new Error();
-    return {
-      price: meta.regularMarketPrice,
-      prevClose: meta.chartPreviousClose || meta.regularMarketPrice,
-      high: meta.regularMarketDayHigh,
-      low: meta.regularMarketDayLow,
-      volume: meta.regularMarketVolume || 0
-    };
+    return { price: meta.regularMarketPrice, prevClose: meta.chartPreviousClose||meta.regularMarketPrice, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, volume: meta.regularMarketVolume||0 };
   } catch {}
-
-  // 方法3: Yahoo Finance via allorigins
   try {
     const yahoo = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}.TW?interval=1d&range=2d`;
-    const res = await fetch(
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahoo)}`,
-      { signal: AbortSignal.timeout(8000) }
-    );
+    const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(yahoo)}`, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) throw new Error();
     const json = await res.json();
     const meta = json?.chart?.result?.[0]?.meta;
     if (!meta?.regularMarketPrice) throw new Error();
-    return {
-      price: meta.regularMarketPrice,
-      prevClose: meta.chartPreviousClose || meta.regularMarketPrice,
-      high: meta.regularMarketDayHigh,
-      low: meta.regularMarketDayLow,
-      volume: meta.regularMarketVolume || 0
-    };
+    return { price: meta.regularMarketPrice, prevClose: meta.chartPreviousClose||meta.regularMarketPrice, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, volume: meta.regularMarketVolume||0 };
   } catch {}
-
-  // 方法4: Yahoo Finance v7 via thingproxy
   try {
     const yahoo = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}.TW`;
-    const res = await fetch(
-      `https://thingproxy.freeboard.io/fetch/${yahoo}`,
-      { signal: AbortSignal.timeout(8000) }
-    );
+    const res = await fetch(`https://thingproxy.freeboard.io/fetch/${yahoo}`, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) throw new Error();
     const json = await res.json();
     const q = json?.quoteResponse?.result?.[0];
     if (!q) throw new Error();
-    return {
-      price: q.regularMarketPrice,
-      prevClose: q.regularMarketPreviousClose || q.regularMarketPrice,
-      high: q.regularMarketDayHigh,
-      low: q.regularMarketDayLow,
-      volume: q.regularMarketVolume || 0
-    };
+    return { price: q.regularMarketPrice, prevClose: q.regularMarketPreviousClose||q.regularMarketPrice, high: q.regularMarketDayHigh, low: q.regularMarketDayLow, volume: q.regularMarketVolume||0 };
   } catch {}
-
   return null;
 }
 
-function fmt(n) {
-  if (n === null || n === undefined) return '—';
-  return Math.abs(n) >= 10000
-    ? (n / 10000).toFixed(2) + '萬'
-    : n.toLocaleString('zh-TW');
-}
-function fmtFull(n) {
-  if (n === null || n === undefined) return '—';
-  return n.toLocaleString('zh-TW');
-}
-function fmtPct(n) {
-  if (n === null || n === undefined) return '—';
-  return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
-}
-function pnlClass(n) { return n >= 0 ? 'pos' : 'neg'; }
+// ===================== 格式化 =====================
+function fmtFull(n) { if (n===null||n===undefined) return '—'; return Math.round(n).toLocaleString('zh-TW'); }
+function fmtPct(n)  { if (n===null||n===undefined) return '—'; return (n>=0?'+':'')+n.toFixed(2)+'%'; }
+function pnlCls(n)  { return n>=0 ? 'pos' : 'neg'; }
 
+// ===================== 更新股價卡 =====================
 function updatePriceCard(symbol, data) {
-  const priceEl = document.getElementById('price-' + symbol);
+  const priceEl  = document.getElementById('price-' + symbol);
   const changeEl = document.getElementById('change-' + symbol);
-  const metaEl = document.getElementById('meta-' + symbol);
+  const metaEl   = document.getElementById('meta-' + symbol);
+  const dailyEl  = document.getElementById('daily-pnl-' + symbol);
+
   if (!data) {
     priceEl.className = 'stock-price';
-    priceEl.innerHTML = '<span style="font-size:14px;color:var(--red)">無法取得股價</span>';
+    priceEl.innerHTML = '<span style="font-size:14px;color:var(--neg)">無法取得股價</span>';
     changeEl.innerHTML = '<span style="font-size:12px;color:var(--text3)">請確認網路連線</span>';
     return;
   }
+
   const prev = prevPrices[symbol];
   prevPrices[symbol] = prices[symbol];
   prices[symbol] = data.price;
+  priceData[symbol] = data;
 
-  priceEl.className = 'stock-price';
+  const chg = data.price - data.prevClose;
+  const chgPct = (chg / data.prevClose) * 100;
+  const isUp = chg >= 0;
+  const cls = chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
+  const arrow = chg > 0 ? '▲' : chg < 0 ? '▼' : '—';
+
+  priceEl.className = 'stock-price ' + (chg > 0 ? 'up' : chg < 0 ? 'down' : '');
   priceEl.textContent = data.price.toFixed(2);
   if (prev !== null && prev !== data.price) {
     priceEl.classList.add('flash');
     setTimeout(() => priceEl.classList.remove('flash'), 400);
   }
 
-  const chg = data.price - data.prevClose;
-  const chgPct = (chg / data.prevClose) * 100;
-  const cls = chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
-  const arrow = chg > 0 ? '▲' : chg < 0 ? '▼' : '—';
-  changeEl.innerHTML = `<span class="stock-change ${cls}">${arrow} ${Math.abs(chg).toFixed(2)} (${chgPct >= 0 ? '+' : ''}${chgPct.toFixed(2)}%)</span>`;
+  changeEl.innerHTML = `<span class="stock-change ${cls}">${arrow} ${Math.abs(chg).toFixed(2)} (${chgPct>=0?'+':''}${chgPct.toFixed(2)}%)</span>`;
+
+  // 每日損益（全家該股）
+  let totalShares = 0;
+  for (const person of Object.values(DATA)) {
+    if (person.stocks[symbol]) totalShares += person.stocks[symbol].shares;
+  }
+  const dailyPnl = chg * totalShares;
+  if (dailyEl) {
+    dailyEl.className = 'stock-daily-pnl ' + (dailyPnl >= 0 ? 'up' : 'down');
+    dailyEl.textContent = `今日損益：${dailyPnl >= 0 ? '+' : ''}${fmtFull(dailyPnl)} 元（全家 ${totalShares.toLocaleString()} 股）`;
+  }
 
   if (data.high && data.low) {
     metaEl.textContent = `高 ${data.high.toFixed(2)}  低 ${data.low.toFixed(2)}  量 ${(data.volume/1000).toFixed(0)}張`;
   }
 }
 
-function calcUnrealized(personKey, symbol, price) {
-  if (!price) return null;
-  const s = DATA[personKey].stocks[symbol];
-  if (!s) return null;
-  return (price - s.avgCostAdj) * s.shares;
-}
-
+// ===================== 持股卡 =====================
 function renderHoldingCard(containerId, personKey, symbol, price) {
   const s = DATA[personKey].stocks[symbol];
-  if (!s) return;
   const container = document.getElementById(containerId);
-  if (!container) return;
+  if (!s || !container) return;
 
   const unrealized = price ? (price - s.avgCostAdj) * s.shares : null;
-  const totalPnl = unrealized !== null ? unrealized + s.realizedPnl : null;
-  const pnlPct = totalPnl !== null ? (totalPnl / s.totalCost) * 100 : null;
-
-  // 手續費估算
+  const totalPnl   = unrealized !== null ? unrealized + s.realizedPnl : null;
+  const pnlPct     = totalPnl !== null ? (totalPnl / s.totalCost) * 100 : null;
   const pureStockCost = Math.round(s.avgCostRaw * s.shares);
   const feeEst = s.totalCost - pureStockCost;
-
-  const cls = symbol === '0050' ? 'holding-0050' : 'holding-006208';
+  const cls  = symbol === '0050' ? 'holding-0050' : 'holding-006208';
   const name = symbol === '0050' ? '元大台灣50' : '富邦台50';
   const accentColor = symbol === '0050' ? 'var(--gold)' : 'var(--teal)';
+
+  // 每日損益（個人）
+  const pd = priceData[symbol];
+  const dailyChg = pd ? (pd.price - pd.prevClose) * s.shares : null;
 
   container.innerHTML = `
     <div class="holding-card ${cls}">
@@ -677,8 +603,9 @@ function renderHoldingCard(containerId, personKey, symbol, price) {
         <div>
           <div class="holding-ticker">${symbol}</div>
           <div style="font-size:11px;color:var(--text3);margin-top:2px">${name}</div>
+          ${dailyChg !== null ? `<div style="font-size:13px;margin-top:4px;color:${dailyChg>=0?'var(--up)':'var(--down)'};font-weight:500">今日 ${dailyChg>=0?'+':''}${fmtFull(dailyChg)}</div>` : ''}
         </div>
-        <div class="holding-pnl-badge ${totalPnl !== null ? pnlClass(totalPnl) : 'flat'}">
+        <div class="holding-pnl-badge ${totalPnl !== null ? pnlCls(totalPnl) : 'flat'}">
           ${totalPnl !== null ? fmtPct(pnlPct) : '試算中'}
         </div>
       </div>
@@ -703,14 +630,14 @@ function renderHoldingCard(containerId, personKey, symbol, price) {
         </div>
         <div class="metric">
           <div class="metric-label">未實現損益</div>
-          <div class="metric-value ${unrealized !== null ? pnlClass(unrealized) : ''}">
-            ${unrealized !== null ? (unrealized >= 0 ? '+' : '') + fmtFull(Math.round(unrealized)) : '計算中'}
+          <div class="metric-value ${unrealized !== null ? pnlCls(unrealized) : ''}">
+            ${unrealized !== null ? (unrealized>=0?'+':'')+fmtFull(unrealized) : '計算中'}
           </div>
         </div>
         <div class="metric">
           <div class="metric-label">已實現損益</div>
-          <div class="metric-value ${pnlClass(s.realizedPnl)}">
-            ${s.realizedPnl >= 0 ? '+' : ''}${fmtFull(s.realizedPnl)}
+          <div class="metric-value ${pnlCls(s.realizedPnl)}">
+            ${s.realizedPnl>=0?'+':''}${fmtFull(s.realizedPnl)}
           </div>
           <div class="metric-sub">含配息 ${fmtFull(s.dividend)}</div>
         </div>
@@ -722,7 +649,7 @@ function renderHoldingCard(containerId, personKey, symbol, price) {
         <div class="cost-row"><span class="label">買入總成本（含手續費）</span><span class="val">${fmtFull(s.totalCost)}</span></div>
         <div class="cost-row"><span class="label">純股票價格成本</span><span class="val">${fmtFull(pureStockCost)}</span></div>
         <div class="cost-row"><span class="label">手續費估算</span><span class="val">${feeEst >= 0 ? fmtFull(feeEst) : '—'}</span></div>
-        <div class="cost-row"><span class="label">總配息收入</span><span class="val" style="color:var(--green)">+${fmtFull(s.dividend)}</span></div>
+        <div class="cost-row"><span class="label">總配息收入</span><span class="val" style="color:var(--pos)">+${fmtFull(s.dividend)}</span></div>
         <div class="cost-row"><span class="label">配股股數</span><span class="val">${s.bonusShares} 股</span></div>
       </div>
     </div>`;
@@ -734,77 +661,75 @@ function toggleCost(el) {
   el.querySelector('span:last-child').textContent = detail.classList.contains('open') ? '▴' : '▾';
 }
 
+// ===================== 個人總損益卡 =====================
 function renderTotalCard(containerId, personKey, price0050, price006208) {
   const container = document.getElementById(containerId);
   if (!container) return;
   const stocks = DATA[personKey].stocks;
-  let totalCost = 0, totalRealized = 0, totalUnrealized = 0;
+  let totalCost=0, totalRealized=0, totalUnrealized=0, totalMkt=0;
 
   for (const [sym, s] of Object.entries(stocks)) {
+    const price = sym === '0050' ? price0050 : price006208;
     totalCost += s.totalCost;
     totalRealized += s.realizedPnl;
-    const price = sym === '0050' ? price0050 : price006208;
-    if (price) totalUnrealized += (price - s.avgCostAdj) * s.shares;
+    if (price) { totalUnrealized += (price - s.avgCostAdj) * s.shares; totalMkt += price * s.shares; }
   }
   const totalPnl = totalRealized + totalUnrealized;
   const rate = (totalPnl / totalCost) * 100;
 
   container.innerHTML = `
     <div class="total-pnl-item">
+      <div class="total-pnl-label">目前總市值</div>
+      <div class="total-pnl-value">${fmtFull(totalMkt) || '計算中'}</div>
+    </div>
+    <div class="total-pnl-item">
       <div class="total-pnl-label">總投入成本</div>
       <div class="total-pnl-value">${fmtFull(totalCost)}</div>
     </div>
     <div class="total-pnl-item">
-      <div class="total-pnl-label">已實現損益</div>
-      <div class="total-pnl-value ${pnlClass(totalRealized)}">${totalRealized >= 0 ? '+' : ''}${fmtFull(Math.round(totalRealized))}</div>
-    </div>
-    <div class="total-pnl-item">
       <div class="total-pnl-label">未實現損益</div>
-      <div class="total-pnl-value ${pnlClass(totalUnrealized)}">${totalUnrealized !== 0 ? (totalUnrealized >= 0 ? '+' : '') + fmtFull(Math.round(totalUnrealized)) : '計算中'}</div>
+      <div class="total-pnl-value ${pnlCls(totalUnrealized)}">${(totalUnrealized>=0?'+':'')+fmtFull(totalUnrealized)}</div>
     </div>
     <div class="total-pnl-item">
       <div class="total-pnl-label">總損益 / 報酬率</div>
-      <div class="total-pnl-value ${pnlClass(totalPnl)}">${totalPnl >= 0 ? '+' : ''}${fmtFull(Math.round(totalPnl))}</div>
-      <div style="font-size:12px;margin-top:3px" class="${pnlClass(totalPnl) === 'pos' ? 'total-pnl-value pos' : 'total-pnl-value neg'}">${fmtPct(rate)}</div>
+      <div class="total-pnl-value ${pnlCls(totalPnl)}">${(totalPnl>=0?'+':'')+fmtFull(totalPnl)}</div>
+      <div style="font-size:13px;margin-top:3px;font-weight:500" class="total-pnl-value ${pnlCls(totalPnl)}">${fmtPct(rate)}</div>
     </div>`;
 }
 
+// ===================== 首頁概況 =====================
 function updateHomeCards() {
   const p0 = prices['0050'], p6 = prices['006208'];
-  let grandCost = 0, grandRealized = 0, grandUnrealized = 0;
+  let grandCost=0, grandRealized=0, grandUnrealized=0, grandMkt=0;
 
   for (const [key, person] of Object.entries(DATA)) {
-    let personCost = 0, personRealized = 0, personUnrealized = 0;
+    let pCost=0, pRealized=0, pUnrealized=0, pMkt=0, pDaily=0;
     for (const [sym, s] of Object.entries(person.stocks)) {
       const price = sym === '0050' ? p0 : p6;
-      personCost += s.totalCost;
-      personRealized += s.realizedPnl;
-      if (price) personUnrealized += (price - s.avgCostAdj) * s.shares;
+      const pd = priceData[sym];
+      pCost += s.totalCost;
+      pRealized += s.realizedPnl;
+      if (price) { pUnrealized += (price - s.avgCostAdj)*s.shares; pMkt += price*s.shares; }
+      if (pd) pDaily += (pd.price - pd.prevClose)*s.shares;
     }
-    const personTotal = personRealized + personUnrealized;
-    const personRate = (personTotal / personCost) * 100;
-    const shortKey = key === 'dad' ? 'dad' : key === 'sis' ? 'sis' : 'bro';
+    const pTotal = pRealized + pUnrealized;
+    const pRate  = (pTotal / pCost) * 100;
 
-    const pnlEl = document.getElementById('home-' + shortKey + '-pnl');
-    const rateEl = document.getElementById('home-' + shortKey + '-rate');
-    const invEl = document.getElementById('home-' + shortKey + '-invested');
-    if (pnlEl) {
-      pnlEl.className = 'person-pnl ' + pnlClass(personTotal);
-      pnlEl.textContent = (personTotal >= 0 ? '+' : '') + fmtFull(Math.round(personTotal));
-    }
-    if (rateEl) {
-      rateEl.className = 'person-rate ' + pnlClass(personTotal);
-      rateEl.textContent = fmtPct(personRate);
-    }
-    if (invEl) invEl.textContent = '總投入 ' + fmtFull(personCost);
+    const pnlEl   = document.getElementById('home-' + key + '-pnl');
+    const rateEl  = document.getElementById('home-' + key + '-rate');
+    const dailyEl = document.getElementById('home-' + key + '-daily');
+    const invEl   = document.getElementById('home-' + key + '-invested');
 
-    grandCost += personCost;
-    grandRealized += personRealized;
-    grandUnrealized += personUnrealized;
+    if (pnlEl)   { pnlEl.className = 'person-pnl ' + pnlCls(pTotal); pnlEl.textContent = (pTotal>=0?'+':'')+fmtFull(pTotal); }
+    if (rateEl)  { rateEl.className = 'person-rate ' + pnlCls(pTotal); rateEl.textContent = fmtPct(pRate); }
+    if (dailyEl) { dailyEl.className = 'person-daily ' + (pDaily>=0?'up':'down'); dailyEl.textContent = `今日 ${pDaily>=0?'+':''}${fmtFull(pDaily)}`; }
+    if (invEl)   { invEl.textContent = '總投入 ' + fmtFull(pCost); }
+
+    grandCost += pCost; grandRealized += pRealized; grandUnrealized += pUnrealized; grandMkt += pMkt;
   }
 
   const grandTotal = grandRealized + grandUnrealized;
-  const grandRate = (grandTotal / grandCost) * 100;
+  const grandRate  = (grandTotal / grandCost) * 100;
 
   const set = (id, val, cls) => {
     const el = document.getElementById(id);
@@ -812,55 +737,157 @@ function updateHomeCards() {
     el.textContent = val;
     if (cls) el.className = 'total-value ' + cls;
   };
-  set('home-total-cost', fmtFull(grandCost));
-  set('home-realized', (grandRealized >= 0 ? '+' : '') + fmtFull(Math.round(grandRealized)), pnlClass(grandRealized));
-  set('home-unrealized', (grandUnrealized >= 0 ? '+' : '') + fmtFull(Math.round(grandUnrealized)), pnlClass(grandUnrealized));
-  set('home-total-pnl', (grandTotal >= 0 ? '+' : '') + fmtFull(Math.round(grandTotal)), pnlClass(grandTotal));
-  set('home-total-rate', fmtPct(grandRate), pnlClass(grandTotal));
+  set('home-total-mkt',   fmtFull(grandMkt));
+  set('home-total-cost',  fmtFull(grandCost));
+  set('home-realized',    (grandRealized>=0?'+':'')+fmtFull(grandRealized),  pnlCls(grandRealized));
+  set('home-unrealized',  (grandUnrealized>=0?'+':'')+fmtFull(grandUnrealized), pnlCls(grandUnrealized));
+  set('home-total-pnl',   (grandTotal>=0?'+':'')+fmtFull(grandTotal),  pnlCls(grandTotal));
+  set('home-total-rate',  fmtPct(grandRate), pnlCls(grandTotal));
 }
 
+// ===================== 明細頁 =====================
+let filterPerson = 'all', filterSymbol = 'all', filterType = 'all';
+
+// 靜態明細（從試算表讀到才會覆蓋）
+const STATIC_TRANSACTIONS = [
+  // 爸爸 0050
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2024/12/19',shares:100,price:48.61,fee:4,amount:4865},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2024/12/20',shares:100,price:48.20,fee:4,amount:4824},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/4/7',shares:256,price:39.60,fee:8,amount:10146},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/4/8',shares:200,price:38.25,fee:6,amount:7656},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/4/22',shares:4000,price:39.4375,fee:63,amount:157813},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/4/24',shares:4000,price:40.7,fee:65,amount:162865},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/4/29',shares:4000,price:41.95,fee:67,amount:167867},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/4/30',shares:12000,price:42.09,fee:203,amount:505283},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2025/5/2',shares:12000,price:43.05,fee:207,amount:516807},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2026/2/5',shares:500,price:72.15,fee:15,amount:36090},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2026/2/23',shares:1000,price:77.9,fee:32,amount:77932},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2026/2/25',shares:1000,price:80.6,fee:33,amount:80633},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2026/4/30',shares:50,price:90.55,fee:2,amount:4529},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2026/5/8',shares:120,price:96.8,fee:5,amount:11621},
+  {person:'dad',pName:'爸爸',symbol:'0050',type:'buy',date:'2026/6/10',shares:100,price:102.05,fee:5,amount:10210},
+  // 爸爸 006208
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2024/12/19',shares:25,price:112.85,fee:2,amount:2823},
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2025/3/10',shares:100,price:108.50,fee:9,amount:10859},
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2025/4/7',shares:62,price:93.35,fee:5,amount:5793},
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2025/4/8',shares:50,price:90.30,fee:3,amount:4518},
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2025/4/9',shares:50,price:87.30,fee:3,amount:4368},
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2025/4/21',shares:1000,price:93.20,fee:38,amount:93238},
+  {person:'dad',pName:'爸爸',symbol:'006208',type:'buy',date:'2025/5/13',shares:1000,price:105.75,fee:1,amount:105751},
+  // 姐姐 006208
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2025/5/19',shares:1000,price:106.50,fee:43,amount:106543},
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2025/5/28',shares:140,price:106.00,fee:6,amount:14846},
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2025/11/11',shares:16,price:148.35,fee:1,amount:2375},
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2025/11/13',shares:67,price:147.10,fee:4,amount:9860},
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2025/12/11',shares:30,price:145.55,fee:2,amount:4368},
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2026/2/6',shares:24,price:164.15,fee:2,amount:3942},
+  {person:'sis',pName:'姐姐',symbol:'006208',type:'buy',date:'2026/2/23',shares:33,price:180.25,fee:3,amount:5951},
+  // 姐姐 0050
+  {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2025/2/14',shares:140,price:48.45,fee:3,amount:6786},
+  {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2025/3/2',shares:24,price:47.08,fee:1,amount:1131},
+  {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2026/6/11',shares:24,price:100.30,fee:1,amount:2408},
+  // 弟弟 006208
+  {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2025/5/19',shares:1000,price:106.50,fee:43,amount:106543},
+  {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2025/11/11',shares:85,price:148.35,fee:6,amount:12616},
+  {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2025/11/13',shares:67,price:147.10,fee:4,amount:9860},
+  {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2025/12/11',shares:29,price:145.50,fee:2,amount:4221},
+  {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2026/2/6',shares:9,price:164.15,fee:1,amount:1478},
+  {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2026/2/23',shares:33,price:180.25,fee:3,amount:5951},
+  // 弟弟 0050
+  {person:'bro',pName:'弟弟',symbol:'0050',type:'buy',date:'2025/2/14',shares:140,price:48.45,fee:3,amount:6786},
+  {person:'bro',pName:'弟弟',symbol:'0050',type:'buy',date:'2025/3/2',shares:24,price:47.08,fee:1,amount:1131},
+];
+
+TRANSACTIONS = STATIC_TRANSACTIONS;
+
+function setFilter(type, val, btn) {
+  if (type === 'person') {
+    filterPerson = val;
+    document.querySelectorAll('.detail-filters .filter-btn').forEach((b,i) => { if(i<=3) b.classList.toggle('active', b===btn); });
+  } else if (type === 'symbol') {
+    filterSymbol = val;
+    document.querySelectorAll('.detail-filters .filter-btn').forEach((b,i) => { if(i>=4&&i<=6) b.classList.toggle('active', b===btn); });
+  } else {
+    filterType = val;
+    document.querySelectorAll('.detail-filters .filter-btn').forEach((b,i) => { if(i>=7) b.classList.toggle('active', b===btn); });
+  }
+  renderDetailTable();
+}
+
+function renderDetailTable() {
+  const tbody = document.getElementById('detail-tbody');
+  const countEl = document.getElementById('detail-count');
+  if (!tbody) return;
+
+  let rows = TRANSACTIONS.filter(t => {
+    if (filterPerson !== 'all' && t.person !== filterPerson) return false;
+    if (filterSymbol !== 'all' && t.symbol !== filterSymbol) return false;
+    if (filterType   !== 'all' && t.type   !== filterType)   return false;
+    return true;
+  });
+
+  // 排序：最新在上
+  rows = rows.slice().sort((a,b) => b.date.localeCompare(a.date));
+
+  if (countEl) countEl.textContent = `共 ${rows.length} 筆`;
+
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="no-data">無符合條件的資料</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(t => `
+    <tr>
+      <td>${t.date}</td>
+      <td>${t.pName}</td>
+      <td style="font-weight:600;color:${t.symbol==='0050'?'var(--gold)':'var(--teal)'}">${t.symbol}</td>
+      <td><span class="${t.type==='buy'?'badge-buy':'badge-sell'}">${t.type==='buy'?'買入':'賣出'}</span></td>
+      <td>${t.shares.toLocaleString()}</td>
+      <td>${t.price.toFixed(2)}</td>
+      <td>${t.fee}</td>
+      <td style="font-weight:600">${fmtFull(t.amount)}</td>
+    </tr>`).join('');
+}
+
+// ===================== 渲染全部 =====================
 function renderAllPersonPages() {
   const p0 = prices['0050'], p6 = prices['006208'];
-  renderHoldingCard('card-dad-0050', 'dad', '0050', p0);
+  renderHoldingCard('card-dad-0050',   'dad', '0050',   p0);
   renderHoldingCard('card-dad-006208', 'dad', '006208', p6);
   renderTotalCard('total-dad', 'dad', p0, p6);
   renderHoldingCard('card-sis-006208', 'sis', '006208', p6);
-  renderHoldingCard('card-sis-0050', 'sis', '0050', p0);
+  renderHoldingCard('card-sis-0050',   'sis', '0050',   p0);
   renderTotalCard('total-sis', 'sis', p0, p6);
   renderHoldingCard('card-bro-006208', 'bro', '006208', p6);
-  renderHoldingCard('card-bro-0050', 'bro', '0050', p0);
+  renderHoldingCard('card-bro-0050',   'bro', '0050',   p0);
   renderTotalCard('total-bro', 'bro', p0, p6);
 }
 
 async function refresh() {
-  const [d0, d6] = await Promise.all([
-    fetchPrice('0050'), fetchPrice('006208')
-  ]);
+  const [d0, d6] = await Promise.all([fetchPrice('0050'), fetchPrice('006208')]);
   updatePriceCard('0050', d0);
   updatePriceCard('006208', d6);
   renderAllPersonPages();
   updateHomeCards();
-
-  const now = new Date();
-  document.getElementById('update-time').textContent =
-    now.toTimeString().slice(0,8);
-  document.getElementById('live-dot').style.background = 'var(--green)';
+  document.getElementById('update-time').textContent = new Date().toTimeString().slice(0,8);
+  document.getElementById('live-dot').style.background = 'var(--pos)';
 }
 
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  const tabs = { home: 0, dad: 1, sis: 2, bro: 3 };
+  const tabs = { home:0, dad:1, sis:2, bro:3, detail:4 };
   document.querySelectorAll('.nav-tab')[tabs[id]].classList.add('active');
+  if (id === 'detail') renderDetailTable();
 }
 
-// 啟動：先載入試算表資料，再開始即時股價更新
 async function init() {
-  await loadSheetData();  // 抓試算表
-  await refresh();        // 抓即時股價 + 渲染
-  setInterval(refresh, 3000);          // 股價每3秒更新
-  setInterval(loadSheetData, 300000);  // 試算表每5分鐘重新同步
+  renderDetailTable();
+  await loadSheetData();
+  await refresh();
+  setInterval(refresh, 3000);
+  setInterval(loadSheetData, 300000);
 }
 
 init();
