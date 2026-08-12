@@ -409,16 +409,16 @@ let APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaMSqk9yANsr7nac
 
 const FALLBACK_DATA = {
   dad: { name: '爸爸', stocks: {
-    '0050':   { shares:71550, totalCost:2809117, avgCostRaw:47.52, avgCostAdj:38.04, dividend:87192, bonusShares:0, realizedPnl:87192, soldShares:0 },
-    '006208': { shares:2618,  totalCost:262219,  avgCostRaw:100.16,avgCostAdj:95.71, dividend:11640, bonusShares:0, realizedPnl:11640, soldShares:0 }
+    '0050':   { shares:71100, totalCost:2809117, avgCostRaw:47.25, avgCostAdj:37.68, dividend:129782, bonusShares:0, realizedPnl:129782, soldShares:0 },
+    '006208': { shares:2618,  totalCost:262219,  avgCostRaw:100.16,avgCostAdj:90.95, dividend:24113,  bonusShares:0, realizedPnl:24113,  soldShares:0 }
   }},
   sis: { name: '姐姐', stocks: {
-    '006208': { shares:1310, totalCost:147884, avgCostRaw:112.89, avgCostAdj:108.82, dividend:5324, bonusShares:0, realizedPnl:5324, soldShares:0 },
-    '0050':   { shares:188,  totalCost:10325,  avgCostRaw:54.92,  avgCostAdj:53.84,  dividend:203,  bonusShares:0, realizedPnl:203,  soldShares:0 }
+    '006208': { shares:1310, totalCost:147884, avgCostRaw:112.89, avgCostAdj:104.08, dividend:11537, bonusShares:0, realizedPnl:11537, soldShares:0 },
+    '0050':   { shares:250,  totalCost:16757,  avgCostRaw:67.03,  avgCostAdj:65.81,  dividend:305,   bonusShares:0, realizedPnl:305,   soldShares:0 }
   }},
   bro: { name: '弟弟', stocks: {
-    '006208': { shares:1223, totalCost:140669, avgCostRaw:115.02, avgCostAdj:110.98, dividend:4941, bonusShares:0, realizedPnl:4941, soldShares:0 },
-    '0050':   { shares:164,  totalCost:7917,   avgCostRaw:48.27,  avgCostAdj:47.04,  dividend:203,  bonusShares:0, realizedPnl:203,  soldShares:0 }
+    '006208': { shares:1223, totalCost:140669, avgCostRaw:115.02, avgCostAdj:106.24, dividend:10740, bonusShares:0, realizedPnl:10740, soldShares:0 },
+    '0050':   { shares:220,  totalCost:13727,  avgCostRaw:62.40,  avgCostAdj:61.07,  dividend:292,   bonusShares:0, realizedPnl:292,   soldShares:0 }
   }}
 };
 
@@ -786,6 +786,7 @@ const STATIC_TRANSACTIONS = [
   {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2025/2/14',shares:140,price:48.45,fee:3,amount:6786},
   {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2025/3/2',shares:24,price:47.08,fee:1,amount:1131},
   {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2026/6/11',shares:24,price:100.30,fee:1,amount:2408},
+  {person:'sis',pName:'姐姐',symbol:'0050',type:'buy',date:'2026/8/11',shares:62,price:103.70,fee:3,amount:6432},
   // 弟弟 006208
   {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2025/5/19',shares:1000,price:106.50,fee:43,amount:106543},
   {person:'bro',pName:'弟弟',symbol:'006208',type:'buy',date:'2025/11/11',shares:85,price:148.35,fee:6,amount:12616},
@@ -796,6 +797,7 @@ const STATIC_TRANSACTIONS = [
   // 弟弟 0050
   {person:'bro',pName:'弟弟',symbol:'0050',type:'buy',date:'2025/2/14',shares:140,price:48.45,fee:3,amount:6786},
   {person:'bro',pName:'弟弟',symbol:'0050',type:'buy',date:'2025/3/2',shares:24,price:47.08,fee:1,amount:1131},
+  {person:'bro',pName:'弟弟',symbol:'0050',type:'buy',date:'2025/8/11',shares:56,price:103.70,fee:3,amount:5810},
 ];
 
 TRANSACTIONS = STATIC_TRANSACTIONS;
