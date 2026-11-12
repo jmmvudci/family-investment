@@ -409,7 +409,7 @@ let APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaMSqk9yANsr7nac
 
 const FALLBACK_DATA = {
   dad: { name: '爸爸', stocks: {
-    '0050':   { shares:71100, totalCost:2809117, avgCostRaw:47.25, avgCostAdj:37.68, dividend:129782, bonusShares:0, realizedPnl:129782, soldShares:0 },
+    '0050':   { shares:71500, totalCost:3401219, avgCostRaw:47.57, avgCostAdj:45.75, dividend:129782, bonusShares:0, realizedPnl:129782, soldShares:0 },
     '006208': { shares:2618,  totalCost:262219,  avgCostRaw:100.16,avgCostAdj:90.95, dividend:24113,  bonusShares:0, realizedPnl:24113,  soldShares:0 }
   }},
   sis: { name: '姐姐', stocks: {
@@ -584,7 +584,7 @@ function renderHoldingCard(containerId, personKey, symbol, price) {
   const container = document.getElementById(containerId);
   if (!s || !container) return;
 
-  const unrealized = price ? (price - s.avgCostAdj) * s.shares : null;
+  const unrealized = price ? (price - s.avgCostRaw) * s.shares : null;
   const totalPnl   = unrealized !== null ? unrealized + s.realizedPnl : null;
   const pnlPct     = totalPnl !== null ? (totalPnl / s.totalCost) * 100 : null;
   const pureStockCost = Math.round(s.avgCostRaw * s.shares);
@@ -672,7 +672,7 @@ function renderTotalCard(containerId, personKey, price0050, price006208) {
     const price = sym === '0050' ? price0050 : price006208;
     totalCost += s.totalCost;
     totalRealized += s.realizedPnl;
-    if (price) { totalUnrealized += (price - s.avgCostAdj) * s.shares; totalMkt += price * s.shares; }
+    if (price) { totalUnrealized += (price - s.avgCostRaw) * s.shares; totalMkt += price * s.shares; }
   }
   const totalPnl = totalRealized + totalUnrealized;
   const rate = (totalPnl / totalCost) * 100;
@@ -709,7 +709,7 @@ function updateHomeCards() {
       const pd = priceData[sym];
       pCost += s.totalCost;
       pRealized += s.realizedPnl;
-      if (price) { pUnrealized += (price - s.avgCostAdj)*s.shares; pMkt += price*s.shares; }
+      if (price) { pUnrealized += (price - s.avgCostRaw)*s.shares; pMkt += price*s.shares; }
       if (pd) pDaily += (pd.price - pd.prevClose)*s.shares;
     }
     const pTotal = pRealized + pUnrealized;
